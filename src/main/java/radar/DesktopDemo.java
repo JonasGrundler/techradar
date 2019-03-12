@@ -495,7 +495,8 @@ public class DesktopDemo extends JFrame {
 
     // "C:\\Work7\\New Technologies\\workspace\\TR\\src\\Items.txt"
     public static void main(String args[]) {
-    	
+
+    	/*
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
         } catch (Exception ex) {
@@ -503,7 +504,7 @@ public class DesktopDemo extends JFrame {
         }
 
         UIManager.put("swing.boldMetal", Boolean.FALSE);
-
+		*/
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	String filename = args != null && args.length > 0 ? args[0] : null;
@@ -582,10 +583,11 @@ public class DesktopDemo extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Technology Radar");
         setResizable(true);
-        setPreferredSize(new Dimension(getMaximumSize().width, getMaximumSize().height));
-        
-        novatecWhite = Toolkit.getDefaultToolkit().createImage("C:\\Work7\\New Technologies\\Prozess\\Logos\\NOVATEC-rgb-weiss-violett-rot_schutz.png");
-        novatecBlack = Toolkit.getDefaultToolkit().createImage("C:\\Work7\\New Technologies\\Prozess\\Logos\\NOVATEC-rgb-schwarz-violett-rot_schutz.jpg");
+        //setPreferredSize(new Dimension(getMaximumSize().width, getMaximumSize().height));
+
+
+        novatecWhite = Toolkit.getDefaultToolkit().createImage(DesktopDemo.class.getClassLoader().getResource("images/NOVATEC-rgb-weiss-violett-rot_schutz.png"));
+        novatecBlack = Toolkit.getDefaultToolkit().createImage(DesktopDemo.class.getClassLoader().getResource("images/NOVATEC-rgb-schwarz-violett-rot_schutz.jpg"));
 
         Container conFrame = this.getContentPane();
 
