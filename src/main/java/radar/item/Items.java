@@ -1060,25 +1060,25 @@ public class Items {
     	for (int i = 0; i < Config.ringsCount && i < itemsByRing.size(); i++) {
     		if (itemsByRing.get(i).size() > 0) {
 	        	int totalRingsLength = 0;
-	        	int[] ringLength = new int[ringItemLines[i]];
+	        	double[] ringLength = new double[ringItemLines[i]];
 	        	for (int r = 0; r < ringItemLines[i]; r++) {
-	        		int minclength = 0;
+	        		double minclength = 0;
 	        		if (i > 0) {
-	        			minclength = Rings.getInstance().getSizes()[i - 1] / 2 + lineSize;
+	        			minclength = Rings.getInstance().getSizes()[i - 1] / 2.0 + lineSize;
 	        		}
-	        		int maxclength = Rings.getInstance().getSizes()[i] / 2 - lineSize;
-	        		int clength = minclength + (maxclength - minclength) / (1 + ringItemLines[i]) * r;
-	        		ringLength[r] = clength;
-	        		totalRingsLength += clength;
+	        		double maxclength = Rings.getInstance().getSizes()[i] / 2.0 - lineSize;
+	        		double clength = minclength + (maxclength - minclength) / (1.0 + ringItemLines[i]) * r;
+	        		ringLength[r] = (int) clength;
+	        		totalRingsLength += (int) clength;
 	        	}
-	        	int speed = totalRingsLength / (itemsByRing.get(i).size());
+	        	double speed = totalRingsLength / (double) (itemsByRing.get(i).size());
 	        	int ring = 0;
 	        	int[] ringCount = new int[ringItemLines[i]];
-	        	int[] ringLength2 = new int[ringLength.length];
+	        	double[] ringLength2 = new double[ringLength.length];
 	        	System.arraycopy(ringLength, 0, ringLength2, 0, ringLength.length);
 	        	for (int o = 0; o < itemsByRing.get(i).size(); o++) {
 	        		ringLength2[ring] -= speed;
-	        		if (ringLength2[ring] < -speed/2) {
+	        		if (ringLength2[ring] < -speed/2.0) {
 	        			ringLength2[ring + 1] += ringLength2[ring];
 	        			ring++;
 	        		}
@@ -1674,7 +1674,7 @@ public class Items {
     		lastP3 = nextP3;
     		squareAdditionRadiusSteps.add(lastR);
     	}
-    	System.out.println("squareSteps:" + squareAdditionRadiusSteps.size());
+    	//System.out.println("squareSteps:" + squareAdditionRadiusSteps.size());
     }
     
     public int getSquareAdditionalRadiusIdx() {
