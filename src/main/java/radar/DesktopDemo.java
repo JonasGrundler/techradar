@@ -3,7 +3,6 @@ import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -50,7 +49,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
-import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 import radar.item.Cluster;
@@ -516,6 +514,7 @@ public class DesktopDemo extends JFrame {
             	if (filename != null) {
             		dd.init(filename);
             	}
+            	dd.initAfterGraphics(true);
             }
         });
     }
