@@ -6,8 +6,10 @@ import radar.item.Util;
 
 public class Rings {
 	
-    private int[] sizes = {150, 650, 750, 850, 950};
-    private int[] offsets = {850, 350, 250, 150, 50};
+    private int[] sizesOrg = {150, 650, 750, 850, 950};
+    private int[] offsetsOrg = {850, 350, 250, 150, 50};
+	private int[] sizes = {150, 650, 750, 850, 950};
+	private int[] offsets = {850, 350, 250, 150, 50};
     private double[][] bigBangMultis = new double[5][1];
     private Point2D[] bigBangPoint1 = new Point2D.Double[5];
     private Point2D[] bigBangPoint2 = new Point2D.Double[5];
@@ -24,13 +26,11 @@ public class Rings {
 	}
 
     public void calculateBasics(double width, double height) {
-    	int rad = (int) Math.round(Math.min(width, height));
-    	//double f = (double) rad / 1000.0;
+    	double rad = (int) Math.round(Math.min(width, height));
     	//if (! square) {
-	    	for (int i = 0; i < sizes.length; i++) {
-	        	int s = (int) Math.round(rad * (double) sizes[i]/(offsets[i] + sizes[i]));
-	        	offsets[i] = (int) Math.round((double)s/sizes[i]*offsets[i]);
-	        	sizes[i] = s;
+	    	for (int i = 0; i < sizesOrg.length; i++) {
+				sizes[i] = (int) Math.round(rad * (double) sizesOrg[i]/(offsetsOrg[i] + sizesOrg[i]));
+	        	offsets[i] = (int) Math.round((double)sizes[i]/(double)sizesOrg[i]*offsetsOrg[i]);
 	        	//System.out.println("size[" + i + "]=" + sizes[i] + ", width=" + width + ", height=" + height);
 	    		//sizes[i] = (int) Math.round((sizes[i]) * f) - Config.yOffset / 2;
 	    		//offsets[i] = (int) Math.round(offsets[i] * f);

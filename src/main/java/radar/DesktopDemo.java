@@ -1134,9 +1134,12 @@ public class DesktopDemo extends JFrame {
 			        			//System.out.println("size[i]=" + Rings.getInstance().getSizes()[i]);
 				            	g2.drawOval(
 				            			jp.getWidth()/2 - Rings.getInstance().getSizes()[i]/2,
-				            			Rings.getInstance().getOffsets()[i] / 2, 
+										Rings.getInstance().getOffsets()[i] / 2 + Math.max(0, (jp.getHeight() - jp.getWidth()) / 2),
 				            			Rings.getInstance().getSizes()[i], Rings.getInstance().getSizes()[i]);
-				            	g2.drawString(Config.texts[i], jp.getWidth()/2 - g2.getFontMetrics().stringWidth(Config.texts[i]) / 2, Math.max(5, jp.getHeight()/2 - Rings.getInstance().getSizes()[i]/2 + (int) r1.getHeight()));
+				            	g2.drawString(
+				            			Config.texts[i],
+										jp.getWidth()/2 - g2.getFontMetrics().stringWidth(Config.texts[i]) / 2,
+										Math.max(5, jp.getHeight()/2 - Rings.getInstance().getSizes()[i]/2 + (int) r1.getHeight()));
 			        		}
 			        	}
 		        	}
