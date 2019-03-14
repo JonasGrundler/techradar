@@ -1,5 +1,5 @@
 package radar;
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +26,7 @@ public class Config {
     public static final int polygonAlpha = 128;
     public static final int paintWait = 1000/60; // 1s/framesPerSecond
     public static final int yOffset = 50;
+    public static final Dimension baseDimension = new Dimension (1920, 1080);
 
     public static final Set<String> categories = new HashSet<>();
     static {

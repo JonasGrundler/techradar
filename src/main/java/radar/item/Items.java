@@ -1126,10 +1126,10 @@ public class Items {
 	        	}
     		}
     	}
-    	if (clusterChange) 
-    	{
+    	if (clusterChange) {
     		fastForwardToTargets();
     	}
+
     	if (showSquare) {
     		animateToSquareInit();
     		while (! squareReached()) {
@@ -1764,7 +1764,7 @@ public class Items {
     	}
     	
     	//
-		if (showSquare && squareAdditionalRadiusIdx == squareAdditionRadiusSteps.size() - 1) {
+		if (showSquare && squareAdditionalRadiusIdx >= squareAdditionRadiusSteps.size() - 1) {
 			animateToSquareEnded = true;
 			cim.clearAddWinkelTmp();
 		} else

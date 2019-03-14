@@ -1,21 +1,5 @@
 package radar;
-import java.awt.AWTException;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.FileDialog;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Robot;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
@@ -25,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -124,8 +109,11 @@ public class DesktopDemo extends JFrame {
 	
 	private boolean searchTyping = false;
 	private StringBuilder searchString = new StringBuilder();
-    
+
     public static DesktopDemo instance;
+
+	private AffineTransform at = new AffineTransform();
+	private AffineTransform ati = new AffineTransform();
     
     /**
      * Creates new form DesktopDemo
@@ -139,17 +127,19 @@ public class DesktopDemo extends JFrame {
         runRadarAndRampUpAndDegree1();
         runRadarAndRampUpAndDegree2();
         runRadarAndRampUpAndDegree3();
-        //runRadarAndRampUpAndDegree4();
+		//runRadarAndRampUpAndDegree4();
     }
-    
+
     private void initAfterGraphics(boolean clusterChange) {
-        Items.getInstance().initGraphics((Graphics2D) getGraphics(), lineSize); 
-		Items.getInstance().setCenter(new Point2D.Double(jp.getSize().getWidth()/2, jp.getSize().getHeight()/2), lineSize);
-        Items.getInstance().calculateItemPositions(clusterChange);
-        if (isVisible()) {
-        	Items.getInstance().setDegrees(MouseInfo.getPointerInfo().getLocation(), jp.getLocationOnScreen());
-        }
-        Items.getInstance().animateToSquareInitSteps();
+		Items.getInstance().initGraphics((Graphics2D) getGraphics(), lineSize);
+		Items.getInstance().setCenter(new Point2D.Double(getCWidth() / 2, getCHeight() / 2), lineSize);
+		Items.getInstance().calculateItemPositions(clusterChange);
+		if (isVisible()) {
+			Items.getInstance().setDegrees(MouseInfo.getPointerInfo().getLocation(), jp.getLocationOnScreen());
+		}
+		if (! showSquare) {
+			Items.getInstance().animateToSquareInitSteps();
+		}
     }
 
     private void init(InputStream is) {
@@ -515,7 +505,7 @@ public class DesktopDemo extends JFrame {
             		dd.init(filename);
             	}
             	dd.initAfterGraphics(true);
-            }
+			}
         });
     }
     
@@ -578,7 +568,7 @@ public class DesktopDemo extends JFrame {
      */
     private void initComponents() {
         
-    	setUndecorated(true);
+    	//setUndecorated(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Technology Radar");
         setResizable(true);
@@ -638,8 +628,8 @@ public class DesktopDemo extends JFrame {
         	
         	public void mouseDragged(MouseEvent e) {
         		if (!showSquare && !showScreenCapture) {
-	        		double w1 = Util.getAngle(Items.getInstance().getCenter(), mousePressedPoint);
-	        		double w2 = Util.getAngle(Items.getInstance().getCenter(), e.getPoint());
+	        		double w1 = Util.getAngle(Items.getInstance().getCenter(), ati.transform(mousePressedPoint, null));
+	        		double w2 = Util.getAngle(Items.getInstance().getCenter(), ati.transform(e.getPoint(), null));
 	        		//System.out.println("w1=" + w1 + ", w2=" + w2);
 	        		double w = 
 					- Util.getWDiff(w1, w2) 
@@ -656,9 +646,9 @@ public class DesktopDemo extends JFrame {
 	            	mouseInCluster = null;
 	            	versatz = 0;
 	            	mousePressedPoint.setLocation(e.getPoint());
-		            Items.getInstance().setDegrees(e.getPoint());
+		            Items.getInstance().setDegrees(ati.transform(e.getPoint(), null));
 	            	
-		            String text = Items.getInstance().setTooltipText(e.getPoint());
+		            String text = Items.getInstance().setTooltipText(ati.transform(e.getPoint(), null));
 		            if (text != null) {
 		            	jp.setToolTipText(text);
 		            	ToolTipManager.sharedInstance().setEnabled(true);
@@ -678,11 +668,11 @@ public class DesktopDemo extends JFrame {
 			
 			@Override
 			public void componentResized(ComponentEvent e) {
-				//Items.getInstance().setCenter(new Point2D.Double(jp.getSize().getWidth()/2, jp.getSize().getHeight()/2), lineSize);
-				Rings.getInstance().calculateBasics((int) jp.getSize().getWidth(), (int) jp.getSize().getHeight()); 
+
+				Rings.getInstance().calculateBasics(getCWidth(), getCHeight());
 				RoundGrid.init(Config.bigBangMoveSpeed);
-		        //Items.getInstance().calculateItemPositions();
-				initAfterGraphics(false);
+				//initAfterGraphics(false);
+
 			}
 			
 			@Override
@@ -734,6 +724,10 @@ public class DesktopDemo extends JFrame {
 					if (c == 'c') {
 						changeColors = ! changeColors;
 					} else
+					if (c == 'i') {
+						Items.getInstance().toggleShowItems();
+						initAfterGraphics(true);
+					} else
 					if (c == 'y') {
 						fileDialog();
 					} else
@@ -763,7 +757,9 @@ public class DesktopDemo extends JFrame {
 						searchTyping = true;
 					} else
 					if (c == 'f' && ! e.isControlDown()) {
-						Items.getInstance().toggleFollowMouse(MouseInfo.getPointerInfo().getLocation(), jp.getLocationOnScreen());
+						Items.getInstance().toggleFollowMouse(
+								MouseInfo.getPointerInfo().getLocation(),
+								jp.getLocationOnScreen());
 					} else
 					if (c == 'w' || c == 'W') {
 						c = 'w';
@@ -771,6 +767,7 @@ public class DesktopDemo extends JFrame {
 					} else
 					if (c == 'z') {
 						if (! showSquare) {
+							initAfterGraphics(true);
 							Items.getInstance().animateToSquareInit();
 							showSquare = true;
 							moveToCircle = false;
@@ -785,14 +782,14 @@ public class DesktopDemo extends JFrame {
 						if (showScreenCapture && fractal != null && !fractal.isEnded() && !fractal.isEnding()){
 							int sc;
 							if (!showSquare) {
-								sc = Math.min(jp.getWidth(), jp.getHeight());
+								sc = Math.min(getCWidth(), getCHeight());
 							} else {
-								sc = Math.max(jp.getWidth(), jp.getHeight());
+								sc = Math.max(getCWidth(), getCHeight());
 							}
 							fractal.removeListenersAndThreads(sc);
 						}
 					}
-	
+
 					key(c);
 				} else {
 					if (c == KeyEvent.VK_ESCAPE) {
@@ -843,9 +840,6 @@ public class DesktopDemo extends JFrame {
 				if (c == 't') {
 					Items.getInstance().toggleShowText();
 				} else
-				if (c == 'i') {
-					Items.getInstance().toggleShowItems();
-				} else
 				if (c == 'p') {
 					Items.getInstance().togglePolygons();
 				} else
@@ -871,21 +865,38 @@ public class DesktopDemo extends JFrame {
 				} else
 				if (c == 'm') {
 					Items.getInstance().animateCloserStart(Config.edgeDistance);
+				}  else
+				if (e.getKeyCode() == KeyEvent.VK_F12) {
+					toggleDecoration();
 				}
+
 				//repaint();
 			}
 		});
-        
-        //setPreferredSize(new Dimension(1000, 1000));
+
+		setPreferredSize(new Dimension(500, 500));
         pack();
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		graphicsInitialized = true;
 		RoundGrid.init(Config.bigBangMoveSpeed);
-    }
+	}
+
+	private void toggleDecoration() {
+		dispose();
+		setUndecorated(!isUndecorated());
+		pack();
+		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		setLocation(new Point(0, 0));
+		setVisible(true);
+	}
     
     private void animateScreenCapture() {
     	int currentScs = 1;
-    	Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+    	//Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+
+		Rectangle screenRect = new Rectangle();
+		screenRect.setLocation(getContentPane().getLocationOnScreen());
+		screenRect.setSize(getContentPane().getSize());
     	try {
 			BufferedImage capture = new Robot().createScreenCapture(screenRect);
 			int width = screenRect.width;
@@ -895,8 +906,8 @@ public class DesktopDemo extends JFrame {
 			//}
 			while (currentScs < screenCaptureScale) {
 				currentScs *= 2;
-				for (int i = 0; i < width; i+=2) {
-					for (int o = 0; o < height; o+=2) {
+				for (int i = 0; i < width - 1; i+=2) {
+					for (int o = 0; o < height - 1; o+=2) {
 						int c1 = capture.getRGB(i, o);
 						int c2 = capture.getRGB(i+1, o);
 						int c3 = capture.getRGB(i+1, o+1);
@@ -932,7 +943,8 @@ public class DesktopDemo extends JFrame {
 			for (int i = 0; i < width; i++) {
 				for (int o = 0; o < height; o++) {
 					int dist = (int) Math.sqrt(Math.pow(width/2-i, 2) + Math.pow(height/2-o, 2));
-					if (dist <= height/2 + 1 || showSquare) {
+					//<System.out.println("dist=" + dist + ", sss=" + getSF() + ", rs=" + Rings.getInstance().getSize());
+					if (dist <= getSF()*Rings.getInstance().getSize()*width/(double)screenRect.width/2.0 + 1 || showSquare) {
 						c[i][o] = new Color(capture.getRGB(i, o));
 					} else {
 						c[i][o] = Color.BLACK;
@@ -1001,8 +1013,8 @@ public class DesktopDemo extends JFrame {
     
     private void fillRadarArea(Graphics2D g) {
     	g.fillOval(
-    			jp.getWidth() / 2 - Rings.getInstance().getSize() / 2 - lineSize * 2, 
-    			jp.getHeight() / 2 - Rings.getInstance().getSize() / 2 - lineSize * 2,
+    			getCWidth() / 2 - Rings.getInstance().getSize() / 2 - lineSize * 2,
+    			getCHeight() / 2 - Rings.getInstance().getSize() / 2 - lineSize * 2,
     			Rings.getInstance().getSize() + lineSize * 4,
     			Rings.getInstance().getSize() + lineSize * 4
     	);
@@ -1028,13 +1040,13 @@ public class DesktopDemo extends JFrame {
 			rh = (int) Math.round(Rings.getInstance().getSizes()[0]/2.0) + off;
 		} else {
 			Point2D ip = Items.getInstance().getItemCenterSquared(Items.getInstance().getSquaredWinkel(Math.PI/360.0*(540.0), false), Rings.getInstance().getSizes()[0]/2);
-	    	rh = - (int) Math.round(ip.getY()) + jp.getHeight() / 2 + off;
+	    	rh = - (int) Math.round(ip.getY()) + getCHeight() / 2 + off;
 		}
 		g2.drawImage(image,
-				jp.getWidth() / 2 - w / 6,
-				jp.getHeight() / 2 - rh - h / 6, 
-				jp.getWidth() / 2 + w / 6,
-				jp.getHeight() / 2 - rh + h / 6, 0, 0, w, h, null);
+				getCWidth() / 2 - w / 6,
+				getCHeight() / 2 - rh - h / 6,
+				getCWidth() / 2 + w / 6,
+				getCHeight() / 2 - rh + h / 6, 0, 0, w, h, null);
     }
     
     
@@ -1048,14 +1060,14 @@ public class DesktopDemo extends JFrame {
     	
         @Override
         public void paint(Graphics g) {
-        	
+
+			Graphics2D g2 = (Graphics2D) g;
+
         	if (! showScreenCapture) {
         	
 	        	long t = System.currentTimeMillis();
 	        	
 	        	//System.out.println("1:" + (System.currentTimeMillis() - t));
-	        	
-	        	Graphics2D g2 = (Graphics2D) g;
 	        	
 	        	//g2.setClip(800, 0, 1600, 800);
 	        	//AffineTransform at = AffineTransform.getScaleInstance(0.5, 0.5);
@@ -1072,15 +1084,32 @@ public class DesktopDemo extends JFrame {
 	        	g2.setColor(fg);
 	        	g2.setBackground(bg);
 	        	if (Config.roundBack) {
-	            	g2.fillRect(0, 0, jp.getWidth(), jp.getHeight());
+	            	g2.fillRect(0, 0, getCWidth(), getCHeight());
 	            	g2.setColor(bg);
 	            	fillRadarArea(g2);
 	        		g2.setColor(fg);
 	        	} else {
-	            	g2.clearRect(0, 0, jp.getWidth(), jp.getHeight());
+	            	g2.clearRect(0, 0, getCWidth(), getCHeight());
 	        	}
-	
-	        	//System.out.println("2:" + (System.currentTimeMillis() - t));
+
+				if (
+						(int) Math.abs (jp.getWidth() - Config.baseDimension.getWidth()) > 0 ||
+								(int) Math.abs(jp.getHeight() - Config.baseDimension.getHeight()) > 0) {
+					double sf = getSF();
+					at.setToIdentity();
+					at.scale(sf, sf);
+					at.translate(
+							- 0.5 / sf * (sf * Config.baseDimension.getWidth() - jp.getWidth()),
+							- 0.5 / sf * (sf * Config.baseDimension.getHeight() - jp.getHeight()));
+					try {
+						ati = at.createInverse();
+					} catch (Exception e) {
+						e.printStackTrace(System.out);
+					}
+					g2.setTransform(at);
+				}
+
+				//System.out.println("2:" + (System.currentTimeMillis() - t));
 	        	synchronized (itsLock) {
 	            	//System.out.println("3:" + (System.currentTimeMillis() - t));
 	       		//its = Items.getInstance();
@@ -1133,13 +1162,13 @@ public class DesktopDemo extends JFrame {
 			        		} else {
 			        			//System.out.println("size[i]=" + Rings.getInstance().getSizes()[i]);
 				            	g2.drawOval(
-				            			jp.getWidth()/2 - Rings.getInstance().getSizes()[i]/2,
-										Rings.getInstance().getOffsets()[i] / 2 + Math.max(0, (jp.getHeight() - jp.getWidth()) / 2),
+				            			getCWidth()/2 - Rings.getInstance().getSizes()[i]/2,
+										Rings.getInstance().getOffsets()[i] / 2 + Math.max(0, (getCHeight() - getCWidth()) / 2),
 				            			Rings.getInstance().getSizes()[i], Rings.getInstance().getSizes()[i]);
 				            	g2.drawString(
 				            			Config.texts[i],
-										jp.getWidth()/2 - g2.getFontMetrics().stringWidth(Config.texts[i]) / 2,
-										Math.max(5, jp.getHeight()/2 - Rings.getInstance().getSizes()[i]/2 + (int) r1.getHeight()));
+										getCWidth()/2 - g2.getFontMetrics().stringWidth(Config.texts[i]) / 2,
+										Math.max(5, getCHeight()/2 - Rings.getInstance().getSizes()[i]/2 + (int) r1.getHeight()));
 			        		}
 			        	}
 		        	}
@@ -1167,10 +1196,10 @@ public class DesktopDemo extends JFrame {
 					    		ClusterInfo ci = its.getCim().get(cat);
 				    			GeneralPath p = ci.getPolygon();
 				    			int alpha = Config.polygonAlpha;
-					    		if (p != null && (mouseInCluster != null && mouseInCluster.equals(cat) || p.contains(
-					    				MouseInfo.getPointerInfo().getLocation().getX() - jp.getLocationOnScreen().getX(),
-					    				MouseInfo.getPointerInfo().getLocation().getY() - jp.getLocationOnScreen().getY()
-					    		))) {
+				    			Point2D.Double pos = new Point2D.Double(
+				    					MouseInfo.getPointerInfo().getLocation().getX() - jp.getLocationOnScreen().getX(),
+										MouseInfo.getPointerInfo().getLocation().getY() - jp.getLocationOnScreen().getY());
+					    		if (p != null && (mouseInCluster != null && mouseInCluster.equals(cat) || p.contains(ati.transform(pos, null)))) {
 					    			alpha = Math.min(255, Config.polygonAlpha + 64);
 					    			//p = its.polygon2(cat, roundBack, (int) Math.round(Config.edgeDistance * 1.2));
 					    			mouseInCluster = cat;
@@ -1185,12 +1214,12 @@ public class DesktopDemo extends JFrame {
 				    	    		double f = (its.getSquareAdditionRadiusStepsSize() - its.getSquareAdditionalRadiusIdx()) / (double) its.getSquareAdditionRadiusStepsSize();
 				    	    		Point2D from = new Point2D.Double(
 				    	    				its.getCenter().getX() * f + (1 - f) * its.getCenter().getX(),
-				    	    				its.getCenter().getY() * f + (1 - f) * jp.getHeight()
+				    	    				its.getCenter().getY() * f + (1 - f) * getCHeight()
 				    	    		);
 				    	    		//System.out.println("f=" + f);
 				    	    		/*
 				    	    		if (showSquare && its.getSquareAdditionalRadiusIdx() > its.getSquareAdditionRadiusStepsSize() / 1.2) {
-				    	    			from = new Point2D.Double(ca.getX(), jp.getHeight());
+				    	    			from = new Point2D.Double(ca.getX(), getCHeight());
 				    	    		} else {
 				    	    			from = its.getCenter();
 				    	    		}*/
@@ -1236,7 +1265,7 @@ public class DesktopDemo extends JFrame {
 			            	fillRadarArea(g2);
 		        		} else {
 			        		g2.setColor(new Color(bg.getRed(), bg.getGreen(), bg.getBlue(), (int) Math.round(255 * (1 - its.getNovaDimm() * its.getNovaDimm()))));
-			        		g2.fillRect(0, 0, jp.getWidth(),  jp.getHeight());
+			        		g2.fillRect(0, 0, getCWidth(),  getCHeight());
 		        		}
 		        	}
 		        	
@@ -1264,7 +1293,7 @@ public class DesktopDemo extends JFrame {
 			            	);
 			            	g2.drawString(
 			            			Config.texts[i], 
-			            			jp.getWidth()/2 - g2.getFontMetrics().stringWidth(Config.texts[i]) / 2, 
+			            			getCWidth()/2 - g2.getFontMetrics().stringWidth(Config.texts[i]) / 2,
 			            			Math.max(5, (int) Math.round(Rings.getInstance().getBigBangPoint1()[i].getY() + (int) r1.getHeight())));
 			        	}
 		        	}
@@ -1475,8 +1504,8 @@ public class DesktopDemo extends JFrame {
         		Rectangle2D w = fm.getStringBounds(searchString.toString(), g);
         		g.drawString(
         			searchString.toString(),
-        			(int) (jp.getWidth() / 2 - w.getCenterX()), 
-        			(int) (jp.getHeight() / 2 - w.getHeight() / 2)
+        			(int) (getCWidth() / 2 - w.getCenterX()),
+        			(int) (getCHeight() / 2 - w.getHeight() / 2)
         		);
         	}
         	
@@ -1686,6 +1715,7 @@ public class DesktopDemo extends JFrame {
     	addUsageText("z", "switch square/circle", "");
     	addUsageText("s", "capture and animate screen", "");
     	addUsageText("F", "toggle enter search on/off (search string:" + searchString + ")", onOff(searchTyping));
+    	addUsageText("F12", "toggle Fullscreen", onOff(isUndecorated()));
     	String mic;
     	if (mouseInCluster != null) {
     		mic = mouseInCluster;
@@ -1722,7 +1752,7 @@ public class DesktopDemo extends JFrame {
 	    		g.setColor(fg);
 	    	}
 	    	g.setFont(new Font("default", Font.PLAIN, 13));
-			Rectangle2D rpfx1 = g.getFontMetrics().getStringBounds("O ", g);
+			Rectangle2D rpfx1 = g.getFontMetrics().getStringBounds("XXX ", g);
 			Rectangle2D rpfx2 = g.getFontMetrics().getStringBounds(" [off]  ", g);
 			int line = 0;
 			int fontStyle;
@@ -1780,10 +1810,24 @@ public class DesktopDemo extends JFrame {
 			}
 	    	for (String s : texts) {
 	        	int y = (int) Math.round(-rpfx1.getY() + height);
-	    		g.drawString(s, (int) Math.round(jp.getWidth() -maxWidth), y);
+	    		g.drawString(s, (int) Math.round(getCWidth() -maxWidth), y);
 	    		height += maxHeight;
 	    	}
     	}
     }
+
+    private int getCWidth() {
+    	//return jp.getWidth();
+		return Config.baseDimension.width;
+	}
+
+	private int getCHeight() {
+    	//return jp.getHeight();
+		return Config.baseDimension.height;
+	}
+
+	private double getSF() {
+		return Math.min(jp.getWidth()/Config.baseDimension.getWidth(), jp.getHeight()/Config.baseDimension.getHeight());
+	}
 }
 
