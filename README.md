@@ -1,14 +1,14 @@
 # techradar
-##Novatec Technology Radar
+## Novatec Technology Radar
 
-###Basic features usage
+### Basic features usage
 __b__ : play animation : black whole (animated when pressed)\
 __i__ : toggle visibility : show items\
 __m__ : play animation : shrink cluster areas (animated when pressed)\
 __p__ : toggle visibility : cluster areas\
 __r__ : toggle animation : radar
 
-###Advanced features usage
+### Advanced features usage
 __space__ : redistribute items\
 __c__: toggle animation : color change\
 __f__ : toggle animation : follow mouse\
