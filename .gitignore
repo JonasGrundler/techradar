@@ -4,3 +4,4 @@ target/maven-archiver/
 target/maven-status/
 .idea
 *.iml
+src/main/resources/sampleDataOrg.txt

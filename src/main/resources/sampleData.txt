@@ -1,1 +1,239 @@
-Deleted	Dup	INR	Name	Description	Topic	Ring	Kategorie	Topic Lead	TNR	SRC	LastChange	RING_Feedback	Kategorie_Feedback	Strategic Topic	CA	OBR_Ring	RSH_RING	JK_RING	AWE_Ring	HML_Ring	ST_RING	TOS_Ring	RBE_Ring	AFA_Ring	SK_RING	HH_Ring	JD_Ring	PBU_Ring	CHE_Ring	CSH_Ring	SSL_Ring	LD_Ring	JK_KAT	ST_KAT	SK_KAT	OBR_KAT	RSH_KAT	LD_Kategorie	HH_Kategorie	HML_Kategorie	AWE_Kategorie	TOS_Kategorie	RBE_Kategorie	AFA_Kategorie	PBU_Kategorie	CHE_Kategorie	CSH_Kategorie	JD_Kategorie	JD_Kommentar	Test	Dublette
+Deleted	Dup	INR	Name	Description	Topic	Ring	Kategorie	Strategic Topic
+		220	#BeyondBudgeting	Alternative Agile Management concept avoiding traditional budgets and incentives.	Business Agility	observe	Methods & Organisationals	Agile Methoden
+		97	#NoEstimates	Apply and train	Business Agility	work	Methods & Organisationals	Agile Methoden
+		224	#NoProjects	Distinguish between Product development and Software Projects.	Business Agility	build-up	Methods & Organisationals	Agile Methoden
+		219	#Valuefirst	Apply in daily work.	Business Agility	evaluate	Methods & Organisationals	Agile Methoden
+		53	12-factor	"https://12factor.net, trying to follow the paradigm behind this"	Cloud Native Development	work	Concepts (Technical)	Cloud
+		73	3D Objekterkennung	How and with which tools?	Machine Learning	evaluate	Concepts (Technical)	ML & AI
+		74	4D Objekterkennung	4D=3D+time. How and with which tools?	Machine Learning	evaluate	Concepts (Technical)	ML & AI
+		141	A/B Testing	"A/B testing (bucket tests or split-run testing) is a randomized experiment with two variants, A and B"	Mobile Apps	work	Methods & Organisationals	Testing
+		232	Agile Collaboration with Atlassian	Consult collaboration and processes in context of Atlassian products.	Application Lifecycle Management	work	Methods & Organisationals	Professional Education
+		196	Agile Leadership	TBD	Agile Management	build-up	Methods & Organisationals	Agile Methoden
+		7	Agile Security	Method of how to (application) secure products in agile dev.	Security & Testing	build-up	Methods & Organisationals	Security
+x		191	Agile Tooling / Atlassian: Klassisches Projekt-Management	TBD	Business Agility	work	Products & Tools	Agile Methoden
+x		192	Agile Tooling / Atlassian: Multi-Project-Management	TBD	Business Agility	build-up	Products & Tools	Agile Methoden
+		44	Akka Lightbend (Fast Data)	programming framework	Reactive	evaluate	Frameworks (Technical)	Software Development
+		123	Alibaba Cloud	Cloud Provider	Cloud Beratung & IT-Architektur	observe	Platforms	Cloud
+		197	AMBER	Architectural Modelling Box for Enterprise Redesign (Business Process Engineering)	EAM	observe	Concepts (Technical)	Architecture
+		142	Android	Operating system and software development platform	Mobile Apps	work	Languages	Software Development
+		143	Android Studio	DIE	Mobile Apps	work	Products & Tools	Software Development
+		118	Angular	SPA framework	Angular	work	Languages	Software Development
+		162	AngularJS	Initial/Old version of Angular	Web Technologies	reduce	Languages	Software Development
+	54	124	API Gateways	API Gateways – also known as Edge Service – are a fundamental part of a cloud-native microservice architecture. They represent the central access point for all requests for the backend services.	Cloud Beratung & IT-Architektur	work	Concepts (Technical)	Cloud
+	54	54	API Gateways	API Gateways – also known as Edge Service – are a fundamental part of a cloud-native microservice architecture. They represent the central access point for all requests for the backend services. 	Cloud Native Development	work	Concepts (Technical)	Cloud
+		8	API Security Testing	Automated API security testing.	Security & Testing	evaluate	Concepts (Technical)	Security
+x		9	Application Development Security	TBD	Security & Testing	build-up	Concepts (Technical)	Security
+		23	Approval Testing	"Methodology, in context of test automation and CI/CD; interesting for ML."	Professional Agile Development	evaluate	Concepts (Technical)	Testing
+		198	ArchiMate	"https://en.wikipedia.org/wiki/ArchiMate , we use and teach"	EAM	work	Concepts (Technical)	Architecture
+		233	Atlassian App Development	Extend Atlassian products.	Application Lifecycle Management	evaluate	Platforms	Software Development
+		94	Atlassian Produkt Beratung; Products and Tools	"Optimize Atlassian tool configurations according to customer needs, e.g. usability, performance, maintenance."	Application Lifecycle Management	work	Methods & Organisationals	Miscellaneous
+x		95	Atlassian Produkte		Business Agility	work	Products & Tools	Miscellaneous
+		125	AWS	Cloud Provider	Cloud Beratung & IT-Architektur	work	Platforms	Cloud
+		126	Azure	Cloud Provider	Cloud Beratung & IT-Architektur	work	Platforms	Cloud
+		55	bare cloud provider	"Native / using proprietary cloud services (e. g. AWS, Azure, Google)"	Cloud Native Development	work	Platforms	Cloud
+		24	BDD (Behavior Driven Development)	Methodology; include business + developers/testers in test definition+execution; connection to business agility.	Professional Agile Development	work	Products & Tools	Testing
+		75	Bilderkennung	"Classification, extraction. Use of CNNs."	Machine Learning	work	Concepts (Technical)	ML & AI
+		199	BizzDesign Enterprise Studio	EAM repository and modeling tool	EAM	work	Products & Tools	Architecture
+		66	Blockchain		Data-X	observe	Concepts (Technical)	Blockchain
+	66	76	Blockchain	Find use cases.	Machine Learning	observe	Concepts (Technical)	Blockchain
+		10	Blockchain Security	Using blockchain to secure applications.	Security & Testing	observe	Concepts (Technical)	Security
+		163	Bluetooth Web	Web API for communicating with bluetooth devices	Web Technologies	evaluate	Frameworks (Technical)	Software Development
+		100	BPEL	Business Process Execution Language - used e. g. by IBM and MS	BPM	reduce	Languages	BPM
+		101	BPM + IoT	Apply process automation to IoT	BPM	evaluate	Concepts (Technical)	IoT
+		102	BPM + ML	use Machine Learning conepts to improve automated processes	BPM	evaluate	Concepts (Technical)	ML & AI
+		103	BPMN 2.0	Business Process Model and Notation - modeling and description language for automation	BPM	work	Languages	BPM
+x		179	BPMS to seperate components	TBD	BPM	work	Concepts (Technical)	BPM
+x		229	Business Agility		Business Agility	build-up	Methods & Organisationals	Agile Methoden
+		200	Business Model Canvas	Business Process Engineering	EAM	evaluate	Concepts (Technical)	Agile Methoden
+		201	C#	TBD	Unresolved	work	Languages	Software Development
+x		180	Camunda	TBD	BPM	work	Products & Tools	BPM
+		104	Camunda BPM	Lightweight Java based  process engine	BPM	work	Products & Tools	BPM
+		105	Camunda Zeebe	Lightweight Java based  process engine based on distributed logs	BPM	evaluate	Products & Tools	Cloud
+		202	Capability Based Planning	CPB is a TOGAF technique focusing on mapping capabilities and linking them to a strategy in EA; we use	EAM	work	Concepts (Technical)	Agile Methoden
+x		181	Case Management 	TBD	BPM	evaluate	Concepts (Technical)	BPM
+		106	Case Management 	Concept to model unstructured processes	BPM	observe	Concepts (Technical)	BPM
+x		182	Central to distributed	TBD	BPM	work	Concepts (Technical)	BPM
+	25	25	Cloud Migration	How do I migrate my existing applications into the cloud?	Professional Agile Development	work	Concepts (Technical)	Testing
+		132	Cloud Native Application Development	How do I build cloud native apps from scratch	Cloud Beratung & IT-Architektur	work	Frameworks (Technical)	Cloud
+		128	Cloud Native Application Platforms	"PaaS-Auswahl (CF, Kubernetes, …)"	Cloud Beratung & IT-Architektur	work	Platforms	Cloud
+	25	127	Cloud-Migration	How do I migrate my existing applications into the cloud?	Cloud Beratung & IT-Architektur	work	Concepts (Technical)	Cloud
+		26	Cloud-Native Testing	Workshop - how to do QE in cloud native SW Dev environments. Focus on test automation.	Professional Agile Development	work	Methods & Organisationals	Testing
+		187	Cobit 5 (Monitoring)	TBD	Monitoring Management & Gouvernance	build-up	Methods & Organisationals	Compliance
+		190	Cognitive Computing	Observe what's next.	Machine Learning	work	Concepts (Technical)	ML & AI
+		82	Combine genetic algorithms and NNs	Alternative approach to train NNs.	Machine Learning	observe	Concepts (Technical)	ML & AI
+		27	Consumer-Driven Contract Testing	Concept used in various projects; foster independent deployability	Professional Agile Development	work	Methods & Organisationals	Testing
+		11	Container Security	"Secure docker, kubernetes, container."	Security & Testing	evaluate	Concepts (Technical)	Security
+		237	Containerization	Apply and be active in community; train.	Application Lifecycle Management	work	Concepts (Technical)	Cloud
+		144	Couchbase	TBD	Mobile Apps	work	Products & Tools	Software Development
+		228	Cynefin 	Basic knowledge. Nice to know for our consultants.	Business Agility	observe	Methods & Organisationals	Agile Methoden
+		238	Data Analytics	apply/use/implement data analytics for the customer	Data-X	build-up	Concepts (Technical)	Data Intelligence
+		77	Data Augmentation	Generate more training data based on existing; use for ML purposes.	Machine Learning	work	Concepts (Technical)	ML & AI
+		177	Datenbank-Training (Theorie)	TBD	Datenbanken	build-up	Concepts (Technical)	Professional Education
+		78	DeepLearning4J	ML framework for Java.	Machine Learning	reduce	Frameworks (Technical)	ML & AI
+x		221	Design Thinking	TBD	Business Agility	evaluate	Methods & Organisationals	Agile Methoden
+		193	Design Thinking	Method to allow innovative product development.	Business Agility	observe	Concepts (Technical)	Agile Methoden
+		119	Desktop Applications (Electron et al.)	Desktop native apps built with web technologies	Angular	evaluate	Products & Tools	Software Development
+		194	DevOps (Deployment-Tooling)	"Apply at customer site, keep ourselves informed."	Application Lifecycle Management	work	Products & Tools	Software Development
+		195	DevOps (Organisations-Prozesse)	Consult customers.	Business Agility	build-up	Methods & Organisationals	Software Development
+		28	DevOps Monitoring	"Gather bus./techn. metrics to enable depl. scenarios like canary deployments (verification), …; bus. view -- does the new feature really help (higher conversion rate e.g.)?"	Professional Agile Development	work	Products & Tools	Testing
+		230	Digital Workplace	Apply in projects.	Business Agility	build-up	Methods & Organisationals	Agile Methoden
+		183	DMN (Decision Management Notation)	Define and execute business rules	BPM	work	Languages	BPM
+		29	Domain Driven Design	Software craft; model software	Professional Agile Development	work	Methods & Organisationals	Architecture
+		60	Eclipse MicroProfile	The MicroProfile is a baseline platform definition that optimizes Enterprise Java for a microservices architecture and cloud-native development with JEE (see https://microprofile.io/)	Cloud Native Development	evaluate	Concepts (Technical)	Software Development
+		203	Edge Computing	TBD	IoT	observe	Concepts (Technical)	IoT
+		79	Einsatz vortrainierter Netze	Know how to use; build our own repository.	Machine Learning	evaluate	Concepts (Technical)	ML & AI
+x		226	ESP (Enterprise Services Planning)	TBD	Business Agility	evaluate	Methods & Organisationals	Agile Methoden
+	130	130	Event Sourcing	"The fundamental idea of Event Sourcing is that of ensuring every change to the state of an application is captured in an event object, and that these event objects are themselves stored in the sequence they were applied for the same lifetime as the application  state itself. https://martinfowler.com/eaaDev/EventSourcing.html"	Cloud Beratung & IT-Architektur	evaluate	Concepts (Technical)	Architecture
+	130	112	Event Sourcing und CQRS	Programming using ES and CQRS.	Spring	evaluate	Concepts (Technical)	Architecture
+		225	Event Storming	DDD; apply in daily work.	Business Agility	build-up	Methods & Organisationals	Agile Methoden
+		129	Event-Driven Architecture	"Event-driven architecture (EDA), is a software architecture pattern"	Cloud Beratung & IT-Architektur	work	Concepts (Technical)	Architecture
+		145	Feature Toggles	TBD	Mobile Apps	work	Concepts (Technical)	Software Development
+		146	Flapper	TBD	Mobile Apps	work	Products & Tools	Software Development
+		188	"flexiblere Veränderung von Prozessen (""Agilisierung"")"	TBD	Monitoring Management & Gouvernance	build-up	Frameworks (Technical)	Compliance
+		12	GDPR	"Need to know, basic understanding neccessary."	Security & Testing	work	Methods & Organisationals	Compliance
+		13	General Cloud Security	Understanding advantages of cloud services related to security.	Security & Testing	evaluate	Concepts (Technical)	Security
+		80	Google AutoML	ML framework.	Machine Learning	evaluate	Frameworks (Technical)	ML & AI
+		131	Google Cloud	Cloud Provider	Cloud Beratung & IT-Architektur	evaluate	Platforms	Cloud
+		147	Google Firebase	Google cloud realtime services	Mobile Apps	evaluate	Products & Tools	Software Development
+		148	Google Flutter	Framework for building android and ios apps	Mobile Apps	observe	Frameworks (Technical)	Software Development
+		149	Google Fuchsia	Operating system by google	Mobile Apps	observe	Products & Tools	Software Development
+	45	30	GraalVM		Professional Agile Development	observe	Platforms	Software Development
+		45	GraalVM	VM for JVM based languages	Reactive	observe	Platforms	Software Development
+		164	GraphQL	Open source data query and manipulation language; use/programming alternative to REST	Web Technologies	evaluate	Frameworks (Technical)	Software Development
+		31	Groovy	Language	Professional Agile Development	reduce	Languages	Software Development
+		81	H2O Driverless.AI	ML framework.	Machine Learning	evaluate	Frameworks (Technical)	ML & AI
+		67	Holistic DI consulting	-- bei Christoph nachfragen --	Data-X	build-up	Methods & Organisationals	Data Intelligence
+		204	Holokratie	TBD	Agile Management	observe	Methods & Organisationals	Agile Methoden
+		14	IAST	Interactive Application Security Testing. Applied by us.	Security & Testing	observe	Methods & Organisationals	Security
+		133	IBM Bluemix	Cloud Provider	Cloud Beratung & IT-Architektur	work	Platforms	Cloud
+		108	"IBM BPM : ODM, ESB, BPM, BPEL, Monitor"	"Legacy obsolete old stuff, still good for making a lot of money"	BPM	reduce	Products & Tools	BPM
+		96	Impact Mapping	Apply and train	Business Agility	work	Methods & Organisationals	Agile Methoden
+		150	IntelliJ	TBD	Mobile Apps	work	Products & Tools	Software Development
+		46	IntelliJ	IDE 	Reactive	build-up	Products & Tools	Software Development
+		151	iOS	TBD	Mobile Apps	work	Platforms	Software Development
+		189	ISO 38500 (Monitoring)	TBD	Monitoring Management & Gouvernance	build-up	Concepts (Technical)	Agile Methoden
+		205	IT4IT	https://www.opengroup.org/it4it ; we use 	EAM	build-up	Methods & Organisationals	Architecture
+		113	Java	Programming.	Spring	work	Languages	Software Development
+		152	Java 11	TBD	Mobile Apps	evaluate	Languages	Software Development
+		153	Javascript	TBD	Mobile Apps	work	Languages	Software Development
+	32	32	JEE	Framework	Professional Agile Development	reduce	Frameworks (Technical)	Software Development
+		165	JSF	Java specification for building component based user interfaces; maintaining JSF based SW components	Web Technologies	reduce	Languages	Software Development
+		134	Kafka	Event driven architectures with Kafka and good practices for using the tool	Cloud Beratung & IT-Architektur	work	Products & Tools	Software Development
+		206	Kanban	TBD	Agile Management	reduce	Methods & Organisationals	Agile Methoden
+		1	KI/ML	"Advanced method to automatically correlate and analyse data in this context, e.g. anomalies."	Digital Experience Monitoring	build-up	Concepts (Technical)	ML & AI
+	32	56	klassisch JEE	"Umsetzung von Anwendung nach dem JEE-Standard aud Basis von (schwergewichtigen) Applikationsservernn wie WebLogic, JBoss, …"	Cloud Native Development	reduce	Frameworks (Technical)	Software Development
+		15	KMaaS	Key Management as a Service; we're using this (as a customer).	Security & Testing	work	Concepts (Technical)	Security
+	47	57	Kotlin	"Use of the Kotlin programming language for developing backend microservices, used for backend service"	Cloud Native Development	work	Languages	Software Development
+	47	154	Kotlin	TBD	Mobile Apps	work	Languages	Software Development
+	47	33	Kotlin	Language	Professional Agile Development	work	Languages	Software Development
+	47	166	Kotlin	JVM based programming language by JetBrains	Web Technologies	work	Languages	Software Development
+		47	Kotlin / Sprachen	Language	Reactive	work	Languages	Software Development
+		48	Kotlin Co-Routines	lightweight threads supporting many use cases	Reactive	evaluate	Languages	Software Development
+		207	Lean	https://en.wikipedia.org/wiki/Lean ; we understand	EAM	observe	Methods & Organisationals	Architecture
+		227	Lean Business Analytics	Measuring impact of Software Deliveries	Business Agility	build-up	Methods & Organisationals	Agile Methoden
+		208	Lean Startup	TBD	Agile Management	work	Methods & Organisationals	Agile Methoden
+		209	LeanIX	Lightweight EA repository tool (https://www.leanix.net); we use	EAM	build-up	Products & Tools	Architecture
+		135	Lift & Shift-Migration	How do I migrate my existing app without refactoring it	Cloud Beratung & IT-Architektur	work	Concepts (Technical)	Cloud
+		34	LivingDoc	BDD tool; consulting asset / door opener	Professional Agile Development	work	Frameworks (Technical)	Testing
+x		35	LivingDoc1	TBD	Professional Agile Development	reduce	Frameworks (Technical)	Testing
+x		36	LivingDoc2	TBD	Professional Agile Development	build-up	Frameworks (Technical)	Testing
+		210	Management 3.0	TBD	Agile Management	build-up	Methods & Organisationals	Agile Methoden
+		58	MDD	Model-Driven-Development: Techniques for automated generation of parts of the software/code from formal models (e.g. UML models)	Cloud Native Development	reduce	Concepts (Technical)	Architecture
+		59	Micro Frameworks	"Lightweight application frameworks like Ktor, Micronaut, Spring Fu or Javalin. Due to their rather small footprint a possible deployment scenario is Serverless Computing. Tested and shortly before work."	Cloud Native Development	build-up	Frameworks (Technical)	Software Development
+		136	Microservice Architectures	How to build applications using microservices	Cloud Beratung & IT-Architektur	work	Methods & Organisationals	Architecture
+		16	Microservice Security	Authentication/Authorization for microservices (programmers perspective).	Security & Testing	work	Concepts (Technical)	Security
+		184	Microservices BPM	Conepts for integrating BPM in microservice architectures	BPM	work	Concepts (Technical)	Cloud
+	25	137	Migration Strategies	TBD	Cloud Beratung & IT-Architektur	build-up	Concepts (Technical)	Architecture
+		211	MindSphere	TBD	IoT	observe	Platforms	IoT
+x		2	ML	TBD	Digital Experience Monitoring	build-up	Concepts (Technical)	ML & AI
+		68	ML	"especially deep learning, object recognition"	Data-X	build-up	Concepts (Technical)	ML & AI
+		83	ML Accountability	"In our projects, who is accountable for NN decisions."	Machine Learning	evaluate	Frameworks (Technical)	ML & AI
+		84	ML Bulid Pipeline	How to automate the lifecylce of NNs.	Machine Learning	work	Frameworks (Technical)	ML & AI
+		85	ML Explainability	"How can we explain NN decisions, which frameworks and processes exist?"	Machine Learning	evaluate	Frameworks (Technical)	ML & AI
+		86	ML Infrastruktur	Which hardware/topologies can be used for NNs?	Machine Learning	work	Frameworks (Technical)	ML & AI
+		87	ML mit Java	Use of ML frameworks with Java.	Machine Learning	observe	Frameworks (Technical)	ML & AI
+		88	ML mit Python	"What are new tools, versions etc."	Machine Learning	work	Frameworks (Technical)	ML & AI
+		89	ML Trainings	Offer ML trainings.	Machine Learning	work	Methods & Organisationals	Professional Education
+x		37	Monitoring	TBD	Professional Agile Development	work	Frameworks (Technical)	Performance
+		114	Netflix OSS	"Hystrix, Feign, Eureka, Ribbon, …"	Spring	work	Frameworks (Technical)	Cloud
+		212	New Work	TBD	Agile Management	observe	Methods & Organisationals	Agile Methoden
+		17	Novatec Security Auditing	Novatec Offering	Security & Testing	build-up	Methods & Organisationals	Security
+		98	OKR	Objectives and Key Results; apply	Business Agility	build-up	Methods & Organisationals	Miscellaneous
+		3	Open APM Initiative	Marketing platform (https://openapm.io/); we use to advertise our services in open source consulting	Digital Experience Monitoring	work	Platforms	Data Intelligence
+		69	Open Source APM	Consulting/use and development of open source solutions for APM	Data-X	work	Concepts (Technical)	Performance
+		138	OpenShift	Container Application Platform	Cloud Beratung & IT-Architektur	observe	Platforms	Cloud
+		213	Orbus iServer	EA repository tool (https://www.orbussoftware.com/); we use; we're partner	EAM	build-up	Products & Tools	Architecture
+		61	Patterns	Cloud Native Patterns (see 12-factor-app)	Cloud Native Development	work	Concepts (Technical)	Cloud
+		70	Performance Analysis	"Consulting across all disciplines (req analysis, impl, analysis, …)"	Data-X	work	Methods & Organisationals	Performance
+		231	Polyglotte Microservices	use (if possible) the suitable technology for the domain and problem	Cloud Native Development	work	Concepts (Technical)	Cloud
+		109	Process Automation	General concept of automating processes	BPM	work	Concepts (Technical)	BPM
+x		185	Process model as monitoring model	TBD	BPM	work	Concepts (Technical)	BPM
+		107	Process Monitoring	Monitor businees activity	BPM	evaluate	Concepts (Technical)	Performance
+		5	Product Consulting (bspw.. AppDynamics)	Consult customers related to one specific product.	Digital Experience Monitoring	reduce	Products & Tools	Data Intelligence
+		167	Progressive Web Apps (PWA)	(Buzzword) Web applications with functionality commonly known from native applications like working offline and push notifications; build offline web apps	Web Technologies	evaluate	Concepts (Technical)	Software Development
+		120	Progressive Web Apps (PWA)	TBD	Angular	observe	Frameworks (Technical)	Software Development
+		155	Progressive Web Apps (PWA)	TBD	Mobile Apps	observe	Frameworks (Technical)	Software Development
+		90	Quantencomputing	What is the impact? When? To be considered?	Machine Learning	observe	Concepts (Technical)	Miscellaneous
+		18	RASP	Runtime Application Self Protection. We look at frameworks.	Security & Testing	observe	Methods & Organisationals	Security
+		168	React	Javascript library for building user interfaces; programming	Web Technologies	work	Frameworks (Technical)	Software Development
+		121	React	TBD	Angular	work	Languages	Software Development
+		156	React Native	TBD	Mobile Apps	work	Frameworks (Technical)	Software Development
+	50	115	Reactive	TBD	Spring	build-up	Concepts (Technical)	Architecture
+		49	Reactive Frameworks	"Spring Reactor, Vertx, Netty"	Reactive	work	Frameworks (Technical)	Software Development
+	50	62	reactive programming	actively used	Cloud Native Development	work	Concepts (Technical)	Software Development
+		50	reactive programming	programming paradigm	Reactive	work	Concepts (Technical)	Software Development
+		157	Realm	TBD	Mobile Apps	work	Products & Tools	Software Development
+		178	Relationale Datenbanken	TBD	Datenbanken	work	Products & Tools	Software Development
+		71	Requirements Implementation DEDI	-- bei Christoph nachfragen --	Data-X	work	Methods & Organisationals	Performance
+		139	Resilient Systems (self healing)	How to build self healing applications	Cloud Beratung & IT-Architektur	build-up	Concepts (Technical)	Architecture
+x		186	RPA	TBD	BPM	observe	Concepts (Technical)	BPM
+		110	RPA	Robotic Process Automation - Remote control for application w/o API through UI	BPM	evaluate	Concepts (Technical)	BPM
+		214	SABSA	enterprise security framework (https://sabsa.org); used by customers; we have need to know	EAM	observe	Methods & Organisationals	Architecture
+		38	Schulung PAD (Professional Agile Development)	"Training; how to efficiently develop software in agile env; TDD, pair progr, CI/CD, code reviews"	Professional Agile Development	work	Methods & Organisationals	Professional Education
+		215	SCRUM	TBD	Agile Management	work	Methods & Organisationals	Agile Methoden
+		216	SCRUM @ Scale	TBD	Agile Management	work	Methods & Organisationals	Agile Methoden
+		19	Security Chaos Engineering	Process to secure applications.	Security & Testing	observe	Concepts (Technical)	Security
+		20	Security for CI/CD Pipelines	Harden CI/CD pipeline (confiugration).	Security & Testing	work	Concepts (Technical)	Security
+x		21	Security Globulis	TBD	Security & Testing	observe	Concepts (Technical)	Security
+		22	Security Training for Devs	Training; security crash course - internal and external	Security & Testing	build-up	Concepts (Technical)	Security
+		169	Server side rendering	HTML pages are dynamically generated on the server and sent to the client	Web Technologies	reduce	Concepts (Technical)	Software Development
+		140	Serverless	How to… use/build/… serverless applications/functions	Cloud Beratung & IT-Architektur	evaluate	Concepts (Technical)	Cloud
+		6	Serverless (Monitoring)	Understand and consult systems based on (/using) a serverless architecture/components.	Digital Experience Monitoring	observe	Concepts (Technical)	ML & AI
+		63	Serverless Computing	"Serverless computing is a cloud-computing execution model in which the cloud provider acts as the server, dynamically managing the allocation of machine resources. Pricing is based on the actual amount of resources consumed by an application, rather than on pre-purchased units of capacity (see https://en.wikipedia.org/wiki/Serverless_computing)"	Cloud Native Development	work	Concepts (Technical)	Cloud
+		39	Serverless/FaaS Lambda	"Tradeoffs, when to use, how to test"	Professional Agile Development	work	Frameworks (Technical)	Cloud
+		40	Simulation Testing	Simulate users in test and in production; find bugs and fix	Professional Agile Development	observe	Concepts (Technical)	Testing
+		158	Software Craftmanship	TBD	Mobile Apps	work	Methods & Organisationals	Software Development
+		4	Solutions Design Consulting (Open APM)	Consult customers based on modular kit of open source components.	Digital Experience Monitoring	work	Products & Tools	Data Intelligence
+		217	Soziokratie	TBD	Agile Management	observe	Methods & Organisationals	Agile Methoden
+		99	Specification by Example	Apply and train	Business Agility	work	Methods & Organisationals	Agile Methoden
+		91	Sprachanalyse	ML use case: Methods and programming.	Machine Learning	work	Concepts (Technical)	ML & AI
+	116	64	Spring Boot/Spring Cloud	actively used	Cloud Native Development	work	Frameworks (Technical)	Cloud
+		116	Spring Cloud	Using as programmer(s).	Spring	work	Frameworks (Technical)	Cloud
+		236	Spring Frameworks	Evaluate and determine use cases.	Spring	work	Concepts (Technical)	Software Development
+		117	Spring Fu	Using as programmer(s).	Spring	observe	Frameworks (Technical)	Cloud
+		51	Spring Reactor	reactive framework	Reactive	work	Frameworks (Technical)	Software Development
+x		52	Spring Reactor 2017	TBD	Reactive	work	Frameworks (Technical)	Software Development
+		223	Story Mapping & Toolset (Atlassian)	Apply; train (future).	Business Agility	work	Methods & Organisationals	Agile Methoden
+x		222	Story Point Estimation	TBD	Business Agility	reduce	Methods & Organisationals	Agile Methoden
+		41	Story Slicing	Agile method we're using; esp with #NoEstimates	Professional Agile Development	work	Methods & Organisationals	Agile Methoden
+		159	Swift	TBD	Mobile Apps	work	Languages	Software Development
+		111	Taskana 	Task Management Framework to manage task lists - Open Source led by Novatec	BPM	build-up	Frameworks (Technical)	BPM
+		160	TDD	TBD	Mobile Apps	work	Methods & Organisationals	Software Development
+		42	TestNG	test framework (compare with JUnit)	Professional Agile Development	reduce	Frameworks (Technical)	Testing
+		218	TOGAF	enterprise architecture framework (https://www.opengroup.org//togaf/); we're leading this	EAM	work	Methods & Organisationals	Architecture
+		72	Tool (Selection) Consulting DEDI	select best tools for customer's requirements	Data-X	work	Methods & Organisationals	Performance
+		170	TypeScript	Superset of JavaScript with optional  static typing. Transpiles to Javascript.	Web Technologies	work	Languages	Software Development
+		234	Unit Testing	fundamental agile development praxis	Professional Agile Development	work	Methods & Organisationals	Testing
+		43	Unit-Tests (aktuell JUnit 5)	technical test framework	Professional Agile Development	work	Frameworks (Technical)	Testing
+x		171	Vaadin	Framework to build web applications with Java	Web Technologies	reduce	Frameworks (Technical)	Software Development
+		172	Vue	Open source JavaScript framework for building single page applications	Web Technologies	build-up	Frameworks (Technical)	Software Development
+		92	Warenkorbanalyse	ML use case: Methods and programming.	Machine Learning	work	Concepts (Technical)	ML & AI
+		173	Web Assembly	Web standard for a binary target which can be executed in web browsers	Web Technologies	observe	Concepts (Technical)	Software Development
+		174	Web Components	Standardized component model for HTML	Web Technologies	observe	Concepts (Technical)	Software Development
+		122	Web Components	TBD	Angular	build-up	Frameworks (Technical)	Software Development
+		235	Webflux	Using as programmer(s).	Spring	work	Frameworks (Technical)	Software Development
+		175	WebRTC	Open source web standard for peer2peer communication between web browsers	Web Technologies	evaluate	Concepts (Technical)	Software Development
+		65	WebSphere/Portal Server		Cloud Native Development	reduce	Frameworks (Technical)	Software Development
+		176	x Reality	Web	Unresolved	observe	Concepts (Technical)	xR
+		161	Xcode	TBD	Mobile Apps	work	Products & Tools	Software Development
+		93	Zeitreihenerkennung	ML use case: Methods and programming.	Machine Learning	work	Concepts (Technical)	ML & AI

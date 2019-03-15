@@ -522,7 +522,7 @@ public class DesktopDemo extends JFrame {
 	        			Items.getTmpInstance().create (ring);
 	        		} else {
 	        			String name = getValue("Name", null, p, headers);
-	        			int groesse = Integer.parseInt(getValue("Größe (0-4)", "2", p, headers));
+	        			int groesse = Integer.parseInt(getValue("Size (0-4)", "2", p, headers));
 	        			int percentage = Integer.parseInt(getValue("Percentage", "100", p, headers));
 	        			if (Config.anonymized) {
 	        				name = getAnonymizedValue("Itemname", name, "item");
@@ -1696,7 +1696,7 @@ public class DesktopDemo extends JFrame {
     
     private void pressKeyAndHold(char keyChar, int seconds) throws InterruptedException {
 		try {
-			System.out.println("key:" + keyChar);
+			//System.out.println("key:" + keyChar);
 			//System.out.println(System.currentTimeMillis() + " pressing..." + keyEvent);
 			KeyEvent ke = new KeyEvent(this, -1, -1, -1, -1,keyChar);
 			kl.keyPressed(ke);
@@ -1725,7 +1725,7 @@ public class DesktopDemo extends JFrame {
     private void typeKey(char keyChar, int seconds, boolean shift) throws InterruptedException {
 		KeyEvent ke = new KeyEvent(this, -1, -1, shift ? KeyEvent.VK_SHIFT : -1, -1,keyChar);
 		try {
-			System.out.println("key:" + keyChar);
+			//System.out.println("key:" + keyChar);
 			/*if (shift) {
 				robot.keyPress(KeyEvent.VK_SHIFT);
 			}*/
