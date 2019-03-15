@@ -44,7 +44,7 @@ public class Item {
 	
 	private ClusterInfo clusterInfo;
 	
-	public void copyInto(Item item, ClusterInfo ci) {
+	public void copyInto(Item item, ClusterInfo ci, boolean deep) {
 		item.text = text;
 		item.placeholder = placeholder;
 		item.size = size;
@@ -59,14 +59,16 @@ public class Item {
 			item.values.putAll(values);
 		}*/
 		item.percentage = percentage;
-		//item.ring = ring;
-		//item.subRing = subRing;
+		if (deep) {
+			item.ring = ring;
+			item.subRing = subRing;
+			item.winkelNr = winkelNr;
+			item.winkel = winkel;
+			item.length = length;
+		}
 		item.textBounds = textBounds;
 		item.center.setLocation(center);
 		item.radarSizeIncrease = radarSizeIncrease;
-		//item.winkelNr = winkelNr;
-		//item.winkel = winkel;
-		//item.length = length;
 		item.tmpRampUp = tmpRampUp;
 		item.tmpRampUpSpeed = tmpRampUpSpeed;
 		item.novaAnimateIdx = novaAnimateIdx;

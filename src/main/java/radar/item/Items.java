@@ -82,13 +82,13 @@ public class Items {
     private boolean showSquareIsAnimating = false;
     private final double squareMaxAdditionalRadius = 5000000;
     private int squareAdditionalRadiusIdx = 0;
-    private double squareRingRadiusBase = 0;
     private double squareRingRadiusBaseOffset = 0;
     private double squareMaxWinkelDiff = 0;
     double squareStretchX = 1.0;
     double squareStretchY = 1.0;
-    
-    private int maximumItemsPerSubring = -1;
+	private List<Double> squareAdditionRadiusSteps = new ArrayList<>();
+
+	private int maximumItemsPerSubring = -1;
     private double minimumWinkelDiffAcrossRings = 0;
     
     private double optimizationReduction = 1.0;
@@ -100,132 +100,177 @@ public class Items {
     private Map<String, Long> lastClusterMove = new HashMap<>();
     private Map<Item, Long> lastItemMove = new HashMap<>();
 
-    private List<Double> squareAdditionRadiusSteps = new ArrayList<>();	
-    
     private boolean roundBack = true;
+
+    public synchronized void resetState() {
+    	setClusterBy(Cluster.STRATEGIC_TOPIC);
+    	lastClusterMove.clear();
+    	lastItemMove.clear();
+		showText = false;
+		showItems = false;
+		followMouse = true;
+		showPolygons = false;
+		optimize = false;
+		showNovaPointsAnimation = false;
+		showNovaPointsAnimation2 = false;
+		showItemsStateBeforeAnimation = false;
+		showBigBangAnimation = false;
+		showBigBangAnimation2 = false;
+		showCloserAnimation = false;
+		showCloserAnimation2 = false;
+		clusterBy = null;
+		optSpeed = 0;
+
+		showResetItemLocationAnimation = false;
+		showClusterAnimation = false;
+		changeAnimationPhase2 = false;
+		clusterByChange = null;
+		oldNovaDimm = 0;
+		oldPolygonDimm = 0;
+		oldShowItems = false;
+
+		closerPercentage = 0;
+
+		bigBangVersatz = 0;
+		bigBangVersatzTotal = 0;
+
+		globalVersatz = 0;
+
+		novaTextDimm = 0.0;
+		novaPolygonDimm = 0.0;
+
+		novaDimm = 1.0;
+		novaAnimateVersatz = 0;
+
+		optimizationReduction = 1.0;
+
+		showStarWarsAnimation = false;
+
+	}
     
-    public synchronized Items getCopy() {
-    	Items items = new Items();
-    	
-    	items.itemCount = this.itemCount;
-    	    	
-    	items.showText = showText;
-    	items.showItems = showItems;
-    	items.followMouse = followMouse;
-    	items.showPolygons = showPolygons;
-    	items.optimize = optimize;
-    	items.showNovaPointsAnimation = showNovaPointsAnimation;
-    	items.showNovaPointsAnimation2 = showNovaPointsAnimation2;
-    	items.showItemsStateBeforeAnimation = showItemsStateBeforeAnimation;
-    	items.showBigBangAnimation = showBigBangAnimation;
-    	items.showBigBangAnimation2 = showBigBangAnimation2;
-    	items.showCloserAnimation = showCloserAnimation;
-    	items.showCloserAnimation2 = showCloserAnimation2;
-    	items.clusterBy = clusterBy;
-    	items.optSpeed = optSpeed;
-        
-    	items.showResetItemLocationAnimation = showResetItemLocationAnimation;
-    	items.showClusterAnimation = showClusterAnimation;
-    	items.changeAnimationPhase2 = changeAnimationPhase2;
-    	items.clusterByChange = clusterByChange;
-    	items.oldNovaDimm = oldNovaDimm;
-    	items.oldPolygonDimm = oldPolygonDimm;
-    	items.oldShowItems = oldShowItems;
-        
-    	items.closerPercentage = closerPercentage;
-        
-    	items.bigBangVersatz =  bigBangVersatz;
-    	items.bigBangVersatzTotal = bigBangVersatzTotal;
-        
-    	items.globalVersatz = globalVersatz;
-        
-    	items.mouseLocation = mouseLocation;
+    public static synchronized void copyState(Items itemsFrom, Items itemsTo, boolean deep) {
+ 		itemsTo.itemCount = itemsFrom.itemCount;
 
-    	items.novaTextDimm = novaTextDimm;
-    	items.novaPolygonDimm = novaPolygonDimm;
-        
-    	items.novaDimm = novaDimm;
-    	items.novaAnimateVersatz = novaAnimateVersatz;
-        
-    	items.center.setLocation(center);
-    	items.centerSquare.setLocation(centerSquare);
-        
-    	System.arraycopy(ringItemLines, 0, items.ringItemLines, 0, ringItemLines.length);
-        
-    	items.lineSize = lineSize;
-        
-    	items.showSquare = showSquare;
-    	items.animateToSquareEnded = animateToSquareEnded;
-    	items.showSquareIsAnimating = showSquareIsAnimating;
-    	items.squareAdditionalRadiusIdx = squareAdditionalRadiusIdx;
-    	items.squareRingRadiusBase = squareRingRadiusBase;
-    	items.squareRingRadiusBaseOffset = squareRingRadiusBaseOffset;
-    	items.squareMaxWinkelDiff = squareMaxWinkelDiff;
-    	items.squareStretchX = squareStretchX;
-    	items.squareStretchY = squareStretchY;
-        
-    	items.maximumItemsPerSubring = maximumItemsPerSubring;
-    	items.minimumWinkelDiffAcrossRings = minimumWinkelDiffAcrossRings;
-        
-    	items.optimizationReduction = optimizationReduction;
-    	
-    	items.showStarWarsAnimation = showStarWarsAnimation;
-    	
-    	items.lastClusterMove.clear();
-    	items.lastItemMove.clear();
-    	
-    	items.squareAdditionRadiusSteps = new ArrayList<>(squareAdditionRadiusSteps);
-    	
-    	items.roundBack = roundBack;
+		itemsTo.showText = itemsFrom.showText;
+		itemsTo.showItems = itemsFrom.showItems;
+		itemsTo.followMouse = itemsFrom.followMouse;
+		itemsTo.showPolygons = itemsFrom.showPolygons;
+		itemsTo.optimize = itemsFrom.optimize;
+		itemsTo.showNovaPointsAnimation = itemsFrom.showNovaPointsAnimation;
+		itemsTo.showNovaPointsAnimation2 = itemsFrom.showNovaPointsAnimation2;
+		itemsTo.showItemsStateBeforeAnimation = itemsFrom.showItemsStateBeforeAnimation;
+		itemsTo.showBigBangAnimation = itemsFrom.showBigBangAnimation;
+		itemsTo.showBigBangAnimation2 = itemsFrom.showBigBangAnimation2;
+		itemsTo.showCloserAnimation = itemsFrom.showCloserAnimation;
+		itemsTo.showCloserAnimation2 = itemsFrom.showCloserAnimation2;
+		itemsTo.clusterBy = itemsFrom.clusterBy;
+		itemsTo.optSpeed = itemsFrom.optSpeed;
 
-    	cim.copyInto(items.cim);
-    	
-    	items.itemsByRing.clear();
-    	items.itemsByClusterAndRing.clear();
-    	items.itemsByRingAndSubringSortedByWinkel.clear();
-    	items.itemsByRingSortedByWinkel.clear();
+		itemsTo.showResetItemLocationAnimation = itemsFrom.showResetItemLocationAnimation;
+		itemsTo.showClusterAnimation = itemsFrom.showClusterAnimation;
+		itemsTo.changeAnimationPhase2 = itemsFrom.changeAnimationPhase2;
+		itemsTo.clusterByChange = itemsFrom.clusterByChange;
+		itemsTo.oldNovaDimm = itemsFrom.oldNovaDimm;
+		itemsTo.oldPolygonDimm = itemsFrom.oldPolygonDimm;
+		itemsTo.oldShowItems = itemsFrom.oldShowItems;
 
-    	while (this.items.size() > items.items.size()) {
-    		items.items.add(new Item(0, "", 0, 0, null));
+		itemsTo.closerPercentage = itemsFrom.closerPercentage;
+
+		itemsTo.bigBangVersatz =  itemsFrom.bigBangVersatz;
+		itemsTo.bigBangVersatzTotal = itemsFrom.bigBangVersatzTotal;
+
+		itemsTo.globalVersatz = itemsFrom.globalVersatz;
+
+		itemsTo.mouseLocation = itemsFrom.mouseLocation;
+
+		itemsTo.novaTextDimm = itemsFrom.novaTextDimm;
+		itemsTo.novaPolygonDimm = itemsFrom.novaPolygonDimm;
+
+		itemsTo.novaDimm = itemsFrom.novaDimm;
+		itemsTo.novaAnimateVersatz = itemsFrom.novaAnimateVersatz;
+
+		itemsTo.center.setLocation(itemsFrom.center);
+		itemsTo.centerSquare.setLocation(itemsFrom.centerSquare);
+        
+    	System.arraycopy(itemsFrom.ringItemLines, 0, itemsTo.ringItemLines, 0, itemsFrom.ringItemLines.length);
+
+		itemsTo.lineSize = itemsFrom.lineSize;
+
+		itemsTo.showSquare = itemsFrom.showSquare;
+		itemsTo.animateToSquareEnded = itemsFrom.animateToSquareEnded;
+		itemsTo.showSquareIsAnimating = itemsFrom.showSquareIsAnimating;
+		itemsTo.squareAdditionalRadiusIdx = itemsFrom.squareAdditionalRadiusIdx;
+		itemsTo.squareRingRadiusBaseOffset = itemsFrom.squareRingRadiusBaseOffset;
+		itemsTo.squareMaxWinkelDiff = itemsFrom.squareMaxWinkelDiff;
+		itemsTo.squareStretchX = itemsFrom.squareStretchX;
+		itemsTo.squareStretchY = itemsFrom.squareStretchY;
+
+		itemsTo.maximumItemsPerSubring = itemsFrom.maximumItemsPerSubring;
+		itemsTo.minimumWinkelDiffAcrossRings = itemsFrom.minimumWinkelDiffAcrossRings;
+
+		itemsTo.optimizationReduction = itemsFrom.optimizationReduction;
+
+		itemsTo.showStarWarsAnimation = itemsFrom.showStarWarsAnimation;
+
+		itemsTo.lastClusterMove.clear();
+		itemsTo.lastItemMove.clear();
+
+		itemsTo.squareAdditionRadiusSteps = new ArrayList(itemsFrom.squareAdditionRadiusSteps);
+
+		itemsTo.roundBack = itemsFrom.roundBack;
+
+		itemsFrom.cim.copyInto(itemsTo.cim);
+
+		itemsTo.itemsByRing.clear();
+		itemsTo.itemsByClusterAndRing.clear();
+		itemsTo.itemsByRingAndSubringSortedByWinkel.clear();
+		itemsTo.itemsByRingSortedByWinkel.clear();
+
+    	while (itemsFrom.items.size() > itemsTo.items.size()) {
+			itemsTo.items.add(new Item(0, "", 0, 0, null));
     	}
-    	while (items.items.size() > this.items.size()) {
-    		items.items.remove(items.items.size() - 1 );
+    	while (itemsTo.items.size() > itemsFrom.items.size()) {
+			itemsTo.items.remove(itemsTo.items.size() - 1 );
     	}
-    	while (items.itemsByRing.size() < itemsByRing.size()) {
-   			items.itemsByRing.add(new ArrayList<>());
+    	while (itemsTo.itemsByRing.size() < itemsFrom.itemsByRing.size()) {
+			itemsTo.itemsByRing.add(new ArrayList<>());
     	}
-    	for (String cvs : itemsByClusterAndRing.keySet()) {
-    		if (! items.itemsByClusterAndRing.containsKey(cvs)) {
-    			items.itemsByClusterAndRing.put(cvs, new ArrayList<>());
+
+    	for (String cvs : itemsFrom.itemsByClusterAndRing.keySet()) {
+    		if (! itemsTo.itemsByClusterAndRing.containsKey(cvs)) {
+				itemsTo.itemsByClusterAndRing.put(cvs, new ArrayList<>());
     		}
-    		while (items.itemsByClusterAndRing.get(cvs).size() < itemsByClusterAndRing.get(cvs).size()) {
-    			items.itemsByClusterAndRing.get(cvs).add(new ArrayList<>());
+    		while (itemsTo.itemsByClusterAndRing.get(cvs).size() < itemsFrom.itemsByClusterAndRing.get(cvs).size()) {
+				itemsTo.itemsByClusterAndRing.get(cvs).add(new ArrayList<>());
     		}
     	}
-    	while (items.itemsByRingSortedByWinkel.size() < itemsByRingSortedByWinkel.size()) {
-    		items.itemsByRingSortedByWinkel.add(new TreeMap<>());
+    	while (itemsTo.itemsByRingSortedByWinkel.size() < itemsFrom.itemsByRingSortedByWinkel.size()) {
+			itemsTo.itemsByRingSortedByWinkel.add(new TreeMap<>());
     	}
-    	while (items.itemsByRingAndSubringSortedByWinkel.size() < itemsByRingAndSubringSortedByWinkel.size()) {
-    		items.itemsByRingAndSubringSortedByWinkel.add(new ArrayList<>());
+    	while (itemsTo.itemsByRingAndSubringSortedByWinkel.size() < itemsFrom.itemsByRingAndSubringSortedByWinkel.size()) {
+			itemsTo.itemsByRingAndSubringSortedByWinkel.add(new ArrayList<>());
     	}
-    	for (int i = 0; i < itemsByRingAndSubringSortedByWinkel.size(); i++) {
-    		while (items.itemsByRingAndSubringSortedByWinkel.get(i).size() < itemsByRingAndSubringSortedByWinkel.get(i).size()) {
-    			items.itemsByRingAndSubringSortedByWinkel.get(i).add(new TreeMap<>());
+    	for (int i = 0; i < itemsFrom.itemsByRingAndSubringSortedByWinkel.size(); i++) {
+    		while (itemsTo.itemsByRingAndSubringSortedByWinkel.get(i).size() < itemsFrom.itemsByRingAndSubringSortedByWinkel.get(i).size()) {
+				itemsTo.itemsByRingAndSubringSortedByWinkel.get(i).add(new TreeMap<>());
     		}
     	}
-    	for (int i = 0; i < this.items.size(); i++) {
-    		Item it = this.items.get(i);
-    		Item itCopy = items.items.get(i);
-    		it.copyInto(itCopy, items.cim.get(it.getClusterValue()));
-    		//items.itemsByRing.get(it.getRing()).add(itCopy);
-    		//items.itemsByClusterAndRing.get(it.getClusterValue()).get(it.getRing()).add(itCopy);
-    		//items.itemsByRingSortedByWinkel.get(it.getRing()).put(it.getWinkel(), itCopy);
-    		//items.itemsByRingAndSubringSortedByWinkel.get(it.getRing()).get(it.getSubRing()).put(it.getWinkelNr(), itCopy);
-    		//items.getCim().get(it.getClusterValue()).addAfterCopy(itCopy);
+    	for (int i = 0; i < itemsFrom.items.size(); i++) {
+    		Item it = itemsFrom.items.get(i);
+    		Item itCopy = itemsTo.items.get(i);
+    		it.copyInto(itCopy, itemsTo.cim.get(it.getClusterValue()), deep);
+    		if (deep) {
+				itemsTo.itemsByRing.get(it.getRing()).add(itCopy);
+				itemsTo.itemsByClusterAndRing.get(it.getClusterValue()).get(it.getRing()).add(itCopy);
+				itemsTo.itemsByRingSortedByWinkel.get(it.getRing()).put(it.getWinkel(), itCopy);
+				itemsTo.itemsByRingAndSubringSortedByWinkel
+						.get(it.getRing())
+						.get(it.getSubRing())
+						.put(it.getWinkelNr(), itCopy);
+				itemsTo.getCim().get(it.getClusterValue()).addAfterCopy(itCopy);
+			}
     	}
-    	items.itemsByRing.get(items.itemsByRing.size() - 1).add(itemsByRing.get(itemsByRing.size() - 1).get(0));
-    	
-    	return items;
+		itemsTo.itemsByRing.get(itemsFrom.itemsByRing.size() - 1).add(itemsFrom.itemsByRing.get(itemsFrom.itemsByRing.size() - 1).get(0));
     }
     
 	
@@ -239,11 +284,11 @@ public class Items {
     
     public static void resetTmpInstance() {
     	tmpInstance = new Items();
-    }
+	}
     public static Items getTmpInstance() {
     	return tmpInstance;
     }
-    public static void switchInstance() {
+    public static synchronized void switchInstance() {
     	synchronized (instance) {
     		synchronized (tmpInstance) {
 		    	tmpInstance.showText = instance.showText;
@@ -283,9 +328,18 @@ public class Items {
 		        tmpInstance.novaAnimateVersatz = instance.novaAnimateVersatz;
 		        
 		        tmpInstance.optimizationReduction = 1.0;
+
 		        tmpInstance.showSquare = instance.showSquare;
-		        
-		        tmpInstance.minimumWinkelDiffAcrossRings = instance.minimumWinkelDiffAcrossRings;
+				tmpInstance.animateToSquareEnded = instance.animateToSquareEnded;
+				tmpInstance.showSquareIsAnimating = instance.showSquareIsAnimating;
+				tmpInstance.squareAdditionalRadiusIdx = instance.squareAdditionalRadiusIdx;
+				tmpInstance.squareRingRadiusBaseOffset = instance.squareRingRadiusBaseOffset;
+				tmpInstance.squareMaxWinkelDiff = instance.squareMaxWinkelDiff;
+				tmpInstance.squareStretchX = instance.squareStretchX;
+				tmpInstance.squareStretchY = instance.squareStretchY;
+				tmpInstance.squareAdditionRadiusSteps = instance.squareAdditionRadiusSteps;
+
+				tmpInstance.minimumWinkelDiffAcrossRings = instance.minimumWinkelDiffAcrossRings;
 		        
 		    	instance = tmpInstance;
 		    	
@@ -361,9 +415,11 @@ public class Items {
 		return false;
 	}
 	
-	public synchronized void calculatePolygons() {
-		for (ClusterInfo ci : cim.getClusterInfos().values()) {
-			ci.polygon2();
+	public void calculatePolygons() {
+    	synchronized (cim) {
+			for (ClusterInfo ci : cim.getClusterInfos().values()) {
+				ci.polygon2();
+			}
 		}
 	}
 	
@@ -411,28 +467,30 @@ public class Items {
 	}
 	
 	public synchronized void setClusterBy(Cluster c) {
-		clusterBy = c;
-		itemsByClusterAndRing = new HashMap<>();
-		cim = new ClusterInfoMap();
-		
-		for (Item item : items) {
-			item.setClusterBy(clusterBy, cim);
-			
-			// itemsByClusterAndRing
-	    	List<List<Item>> cluster = itemsByClusterAndRing.get(item.getClusterValue());
-	    	if (cluster == null) {
-	    		cluster = new ArrayList<>();
-	    		for (int i = 0; i < Rings.getInstance().getSizes().length; i++) {
-	    			cluster.add(null);
-	    		}
-	    		itemsByClusterAndRing.put(item.getClusterValue(), cluster);
-	    	}
-			List<Item> l = cluster.get(item.getRing());
-			if (l == null) {
-				l = new ArrayList<>();
-				cluster.set(item.getRing(), l);
+    	synchronized (Items.class) {
+			clusterBy = c;
+			itemsByClusterAndRing = new HashMap<>();
+			cim = new ClusterInfoMap();
+
+			for (Item item : items) {
+				item.setClusterBy(clusterBy, cim);
+
+				// itemsByClusterAndRing
+				List<List<Item>> cluster = itemsByClusterAndRing.get(item.getClusterValue());
+				if (cluster == null) {
+					cluster = new ArrayList<>();
+					for (int i = 0; i < Rings.getInstance().getSizes().length; i++) {
+						cluster.add(null);
+					}
+					itemsByClusterAndRing.put(item.getClusterValue(), cluster);
+				}
+				List<Item> l = cluster.get(item.getRing());
+				if (l == null) {
+					l = new ArrayList<>();
+					cluster.set(item.getRing(), l);
+				}
+				l.add(item);
 			}
-			l.add(item);
 		}
 	}
 
@@ -1054,78 +1112,80 @@ public class Items {
 	}
     
     public synchronized void calculateItemPositions(boolean clusterChange) {
-    	itemsByRingAndSubringSortedByWinkel.clear();
-    	itemsByRingSortedByWinkel.clear();
-    	minimumWinkelDiffAcrossRings = Double.MAX_VALUE;
-    	for (int i = 0; i < Config.ringsCount && i < itemsByRing.size(); i++) {
-    		if (itemsByRing.get(i).size() > 0) {
-	        	int totalRingsLength = 0;
-	        	double[] ringLength = new double[ringItemLines[i]];
-	        	for (int r = 0; r < ringItemLines[i]; r++) {
-	        		double minclength = 0;
-	        		if (i > 0) {
-	        			minclength = Rings.getInstance().getSizes()[i - 1] / 2.0 + lineSize;
-	        		}
-	        		double maxclength = Rings.getInstance().getSizes()[i] / 2.0 - lineSize;
-	        		double clength = minclength + (maxclength - minclength) / (1.0 + ringItemLines[i]) * r;
-	        		ringLength[r] = (int) clength;
-	        		totalRingsLength += (int) clength;
-	        	}
-	        	double speed = totalRingsLength / (double) (itemsByRing.get(i).size());
-	        	int ring = 0;
-	        	int[] ringCount = new int[ringItemLines[i]];
-	        	double[] ringLength2 = new double[ringLength.length];
-	        	System.arraycopy(ringLength, 0, ringLength2, 0, ringLength.length);
-	        	for (int o = 0; o < itemsByRing.get(i).size(); o++) {
-	        		ringLength2[ring] -= speed;
-	        		if (ringLength2[ring] < -speed/2.0) {
-	        			ringLength2[ring + 1] += ringLength2[ring];
-	        			ring++;
-	        		}
-	        		ringCount[ring]++;
-	        		maximumItemsPerSubring = Math.max(maximumItemsPerSubring, ringCount[ring]);
-	        	}
-        		minimumWinkelDiffAcrossRings = Math.PI * 2 / maximumItemsPerSubring;
-	        	int subring = 0;
-	        	for (int o = 0; o < itemsByRing.get(i).size(); o++) {
-	        		
-	        		Item item = itemsByRing.get(i).get(o);
-	        		
-	        		int minclength = 0;
-	        		if (i > 0) {
-	        			minclength = Rings.getInstance().getSizes()[i - 1] / 2 + lineSize;
-	        		}
-	        		int maxclength = Rings.getInstance().getSizes()[i] / 2 - lineSize;
-	        		//int ring = ((o * rings[i]) / items[i].length) + 1;
-	        		ringLength[subring] -= speed;
-	        		if (ringLength[subring] < -speed/2) {
-	        			ringLength[subring + 1] += ringLength[subring];
-	        			subring++;
-	        		}
-	        		int clength = minclength + (maxclength - minclength) / (1 + ringItemLines[i]) * (subring + 1);
-	        		double versatz = Math.PI*2/(itemsByRing.get(i).size()/ringItemLines[i])/2 * subring/* + 0.01*/;
-	        		double winkel = globalVersatz + versatz + Math.PI*2/(ringCount[subring])*(o  % (ringCount[subring]));
-	        		double baseX = center.getX() + Math.cos(winkel) * clength;
-	        		double baseY = center.getY() + Math.sin(winkel) * clength;
-	        		
-	        		while (itemsByRingSortedByWinkel.size() <= i) {
-	        			itemsByRingSortedByWinkel.add(new TreeMap<>());
-	        		}
-	        		while (itemsByRingAndSubringSortedByWinkel.size() <= i) {
-	        			itemsByRingAndSubringSortedByWinkel.add(new ArrayList<>());
-	        		}
-	        		while (itemsByRingAndSubringSortedByWinkel.get(i).size() <= subring) {
-	        			itemsByRingAndSubringSortedByWinkel.get(i).add(new TreeMap<>());
-	        		}
-	        		while (itemsByRingAndSubringSortedByWinkel.get(i).size() <= item.getSubRing()) {
-	        			itemsByRingAndSubringSortedByWinkel.get(i).add(new TreeMap<>());
-	        		}
-	        		
-	        		removeItem(item);
-	        		setWinkelAndLengthAndSubringAndCenter (item, winkel, winkel, clength, clength, subring, new Point2D.Double(baseX, baseY), o);
-	        	}
-    		}
-    	}
+    	if (clusterChange) {
+			itemsByRingAndSubringSortedByWinkel.clear();
+			itemsByRingSortedByWinkel.clear();
+			minimumWinkelDiffAcrossRings = Double.MAX_VALUE;
+			for (int i = 0; i < Config.ringsCount && i < itemsByRing.size(); i++) {
+				if (itemsByRing.get(i).size() > 0) {
+					int totalRingsLength = 0;
+					double[] ringLength = new double[ringItemLines[i]];
+					for (int r = 0; r < ringItemLines[i]; r++) {
+						double minclength = 0;
+						if (i > 0) {
+							minclength = Rings.getInstance().getSizes()[i - 1] / 2.0 + lineSize;
+						}
+						double maxclength = Rings.getInstance().getSizes()[i] / 2.0 - lineSize;
+						double clength = minclength + (maxclength - minclength) / (1.0 + ringItemLines[i]) * r;
+						ringLength[r] = (int) clength;
+						totalRingsLength += (int) clength;
+					}
+					double speed = totalRingsLength / (double) (itemsByRing.get(i).size());
+					int ring = 0;
+					int[] ringCount = new int[ringItemLines[i]];
+					double[] ringLength2 = new double[ringLength.length];
+					System.arraycopy(ringLength, 0, ringLength2, 0, ringLength.length);
+					for (int o = 0; o < itemsByRing.get(i).size(); o++) {
+						ringLength2[ring] -= speed;
+						if (ringLength2[ring] < -speed / 2.0) {
+							ringLength2[ring + 1] += ringLength2[ring];
+							ring++;
+						}
+						ringCount[ring]++;
+						maximumItemsPerSubring = Math.max(maximumItemsPerSubring, ringCount[ring]);
+					}
+					minimumWinkelDiffAcrossRings = Math.PI * 2 / maximumItemsPerSubring;
+					int subring = 0;
+					for (int o = 0; o < itemsByRing.get(i).size(); o++) {
+
+						Item item = itemsByRing.get(i).get(o);
+
+						int minclength = 0;
+						if (i > 0) {
+							minclength = Rings.getInstance().getSizes()[i - 1] / 2 + lineSize;
+						}
+						int maxclength = Rings.getInstance().getSizes()[i] / 2 - lineSize;
+						//int ring = ((o * rings[i]) / items[i].length) + 1;
+						ringLength[subring] -= speed;
+						if (ringLength[subring] < -speed / 2) {
+							ringLength[subring + 1] += ringLength[subring];
+							subring++;
+						}
+						int clength = minclength + (maxclength - minclength) / (1 + ringItemLines[i]) * (subring + 1);
+						double versatz = Math.PI * 2 / (itemsByRing.get(i).size() / ringItemLines[i]) / 2 * subring/* + 0.01*/;
+						double winkel = globalVersatz + versatz + Math.PI * 2 / (ringCount[subring]) * (o % (ringCount[subring]));
+						double baseX = center.getX() + Math.cos(winkel) * clength;
+						double baseY = center.getY() + Math.sin(winkel) * clength;
+
+						while (itemsByRingSortedByWinkel.size() <= i) {
+							itemsByRingSortedByWinkel.add(new TreeMap<>());
+						}
+						while (itemsByRingAndSubringSortedByWinkel.size() <= i) {
+							itemsByRingAndSubringSortedByWinkel.add(new ArrayList<>());
+						}
+						while (itemsByRingAndSubringSortedByWinkel.get(i).size() <= subring) {
+							itemsByRingAndSubringSortedByWinkel.get(i).add(new TreeMap<>());
+						}
+						while (itemsByRingAndSubringSortedByWinkel.get(i).size() <= item.getSubRing()) {
+							itemsByRingAndSubringSortedByWinkel.get(i).add(new TreeMap<>());
+						}
+
+						removeItem(item);
+						setWinkelAndLengthAndSubringAndCenter(item, winkel, winkel, clength, clength, subring, new Point2D.Double(baseX, baseY), o);
+					}
+				}
+			}
+		}
     	if (clusterChange) {
     		fastForwardToTargets();
     	}
@@ -1618,7 +1678,6 @@ public class Items {
     
     public void animateToSquareInitCalcValues() {
     	squareAdditionalRadiusIdx = 0;
-    	squareRingRadiusBase = Rings.getInstance().getSize() / 2.0;
     	squareRingRadiusBaseOffset = Config.yOffset;
     	squareMaxWinkelDiff = 0;
     	squareStretchX = 1.0;
@@ -1645,7 +1704,7 @@ public class Items {
     	if (center.getY() > 30000) {
     		return;
     	}
-    	animateToSquareInitCalcValues();
+    	//animateToSquareInitCalcValues();
     	squareAdditionRadiusSteps.clear();
     	double lastR = 0;
     	Point2D lastP1 = new Point2D.Double(0, 0);
@@ -1793,7 +1852,7 @@ public class Items {
     }
     
     private Point2D getItemCenterSquared(double winkel, double lengthCircle, int squareAdditionalRadiusIdx, boolean stretch) {
-    	return getItemCenterSquaredInternal(winkel, lengthCircle, squareAdditionRadiusSteps.get(squareAdditionalRadiusIdx), stretch, true);
+    	return getItemCenterSquaredInternal(winkel, lengthCircle, squareAdditionRadiusSteps.get(Math.min(squareAdditionalRadiusIdx, squareAdditionRadiusSteps.size() - 1)), stretch, true);
     }
 
     private Point2D getItemCenterSquaredInternal(double winkel, double lengthCircle, double squareAdditionalRadius, boolean stretch, boolean restretch) {
@@ -1828,23 +1887,25 @@ public class Items {
     }
 
     public double getSquaredWinkel (double winkelCircle) {
+    	//System.out.print(squareAdditionRadiusSteps.size() + ";");
     	return getSquaredWinkel(winkelCircle, true);
     }
     
     public double getSquaredWinkel (double winkelCircle, boolean stretchX) {
-    	return getSquaredWinkelInternal(winkelCircle, stretchX, squareAdditionRadiusSteps.get(squareAdditionalRadiusIdx));
+    	return getSquaredWinkelInternal(winkelCircle, stretchX, squareAdditionRadiusSteps.get(Math.min(squareAdditionalRadiusIdx, squareAdditionRadiusSteps.size() - 1)));
     }
     
     private double getSquaredWinkelInternal (double winkelCircle, boolean stretchX, double addR) {
     	double diffw2;
+    	double f = Rings.getInstance().getSize() / 2.0;
 		if (winkelCircle > Math.PI * 3.0 / 2.0 || winkelCircle < Math.PI / 2.0) {
 			if (winkelCircle < Math.PI / 2) {
-				diffw2 = (winkelCircle + Math.PI / 2.0) * squareRingRadiusBase / (squareRingRadiusBase + addR);
+				diffw2 = (winkelCircle + Math.PI / 2.0) * f / (f + addR);
 			} else {
-				diffw2 = (winkelCircle - Math.PI * 1.5) * squareRingRadiusBase / (squareRingRadiusBase + addR);
+				diffw2 = (winkelCircle - Math.PI * 1.5) * f / (f + addR);
 			}
 		} else {
-			diffw2 = - (Math.PI * 1.5 - winkelCircle) * squareRingRadiusBase / (squareRingRadiusBase + addR);
+			diffw2 = - (Math.PI * 1.5 - winkelCircle) * f / (f + addR);
 		}
 		//System.out.println("winkelCircle=" + winkelCircle + ", diffw2=" + diffw2);
 		if (stretchX) {

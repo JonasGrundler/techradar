@@ -110,24 +110,102 @@ public class DesktopDemo extends JFrame {
 	private boolean searchTyping = false;
 	private StringBuilder searchString = new StringBuilder();
 
-    public static DesktopDemo instance;
+    //public static DesktopDemo instance;
 
 	private AffineTransform at = new AffineTransform();
 	private AffineTransform ati = new AffineTransform();
-    
-    /**
-     * Creates new form DesktopDemo
-     */
-    public DesktopDemo() {
-    	instance = this;
-    	init(DesktopDemo.class.getClassLoader().getResourceAsStream("sampleData.txt"));
-        initComponents();
-        initAfterGraphics(true);
-        runRadarAndRampUpAndDegree();
-        runRadarAndRampUpAndDegree1();
-        runRadarAndRampUpAndDegree2();
-        runRadarAndRampUpAndDegree3();
-		//runRadarAndRampUpAndDegree4();
+
+	//private Object playInterruptObj = new Object();
+	private Thread playThread;
+
+	private KeyListener kl;
+
+	private static void copyState(
+			DesktopDemo demoFrom, DesktopDemo demoTo,
+			Items itemsFrom, Items itemsTo
+	) {
+
+		//synchronized (demoFrom)
+		{
+			Items.copyState(itemsFrom, itemsTo, true);
+
+			demoTo.showRadar = demoFrom.showRadar;
+			demoTo.showClusterNames = demoFrom.showClusterNames;
+			demoTo.showPolygonLines = demoFrom.showPolygonLines;
+
+			demoTo.changeColors = demoFrom.changeColors;
+
+			demoTo.clusterIndex = demoFrom.clusterIndex;
+			demoTo.simplifyArcs = demoFrom.simplifyArcs;
+
+			demoTo.versatz = demoFrom.versatz;
+
+			demoTo.optSpeed = demoFrom.optSpeed;
+
+			demoTo.printUsage = demoFrom.printUsage;
+
+			demoTo.showScreenCapture = demoFrom.showScreenCapture;
+			demoTo.screenCaptureScale = demoFrom.screenCaptureScale;
+
+			demoTo.searchTyping = demoFrom.searchTyping;
+			demoTo.searchString = demoFrom.searchString;
+
+			demoTo.showSquare = demoFrom.showSquare;
+		}
+	}
+
+
+	private synchronized void resetState() {
+
+		clusterIndex = 0;
+
+		showRadar = true;
+		showClusterNames = true;
+		showPolygonLines = false;
+
+		changeColors = true;
+
+		clusterIndex = 0;
+		simplifyArcs = true;
+
+		versatz = 0;
+
+		optSpeed = Config.optimizationSpeed;
+
+		printUsage = true;
+
+		showScreenCapture = false;
+		screenCaptureScale = 4;
+
+		searchTyping = false;
+		searchString = new StringBuilder();
+
+		if (showSquare) {
+			moveToCircle = true;
+		}
+
+		while (drillOut());
+
+		Items.getInstance().resetState();
+
+	}
+
+
+		/**
+         * Creates new form DesktopDemo
+         */
+    public DesktopDemo(boolean init) {
+    	if (init) {
+			init(DesktopDemo.class.getClassLoader().getResourceAsStream("sampleData.txt"));
+			initComponents();
+			initAfterGraphics(true);
+			Items.getInstance().animateToSquareInitSteps();
+			runRadarAndRampUpAndDegree();
+			runRadarAndRampUpAndDegree1();
+			runRadarAndRampUpAndDegree2();
+			runRadarAndRampUpAndDegree3();
+			//runRadarAndRampUpAndDegree4();
+		}
     }
 
     private void initAfterGraphics(boolean clusterChange) {
@@ -137,9 +215,9 @@ public class DesktopDemo extends JFrame {
 		if (isVisible()) {
 			Items.getInstance().setDegrees(MouseInfo.getPointerInfo().getLocation(), jp.getLocationOnScreen());
 		}
-		if (! showSquare) {
-			Items.getInstance().animateToSquareInitSteps();
-		}
+		//if (!showSquare) {
+			//Items.getInstance().animateToSquareInitSteps();
+		//}
     }
 
     private void init(InputStream is) {
@@ -180,10 +258,11 @@ public class DesktopDemo extends JFrame {
 	    				}
 	    				t = System.currentTimeMillis();
 	    				if (!showScreenCapture) {
-		    				Items its2 = Items.getInstance().getCopy();
+		    				Items its2 = new Items();
+		    				Items.copyState(Items.getInstance(), its2, false);
 		    				synchronized (itsLock) {
 		    					its = its2;
-			    				}
+		    				}
 		    				repaint();
 		    				/*synchronized (fpsLock) {
 		    					try {
@@ -484,6 +563,9 @@ public class DesktopDemo extends JFrame {
     // "C:\\Work7\\New Technologies\\workspace\\TR\\src\\Items.txt"
     public static void main(String args[]) {
 
+    	final DesktopDemo dd = new DesktopDemo(true);
+		dd.setVisible(true);
+
     	/*
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
@@ -496,17 +578,29 @@ public class DesktopDemo extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	String filename = args != null && args.length > 0 ? args[0] : null;
-            	DesktopDemo dd = new DesktopDemo();
-            	dd.setVisible(true);
+            	//DesktopDemo dd = new DesktopDemo();
+				//try {Thread.sleep(1000); } catch (Exception e) {};
+				//Items.getInstance().toggleShowItems();
+				//try {Thread.sleep(1000); } catch (Exception e) {};
+				//dd.initAfterGraphics(true);
             	/*if (filename == null) {
             		dd.fileDialog();
             	}*/
             	if (filename != null) {
             		dd.init(filename);
             	}
-            	dd.initAfterGraphics(true);
 			}
         });
+        /*
+        SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				//try {Thread.sleep(1000); } catch (Exception e) {};
+				Items.getInstance().toggleShowItems();
+				//try {Thread.sleep(1000); } catch (Exception e) {};
+				dd.initAfterGraphics(true);
+			}
+		});*/
     }
     
     public void fileDialog() {
@@ -531,7 +625,7 @@ public class DesktopDemo extends JFrame {
         });
     }
     
-    private void drillIn() {
+    private synchronized void drillIn() {
 		if (mouseInCluster != null) {
 			if (itemPath.size() == 0 || !mouseInCluster.equals(itemPath.lastElement())) {
 				Items.resetTmpInstance();
@@ -552,8 +646,10 @@ public class DesktopDemo extends JFrame {
 		}
     }
     
-    private void drillOut() {
+    private synchronized boolean drillOut() {
+    	boolean didDrillOut;
 		if (itemStack.size() > 0) {
+			didDrillOut = true;
 			Items.resetTmpInstance();
 			List<Item> l = itemStack.pop();
 			itemPath.pop();
@@ -561,14 +657,17 @@ public class DesktopDemo extends JFrame {
 				Items.getTmpInstance().create(item);
 			}
 			switchTmpItems();
+		} else {
+			didDrillOut = false;
 		}
+		return didDrillOut;
     }
     
     /** Create and show components
      */
     private void initComponents() {
         
-    	//setUndecorated(true);
+    	setUndecorated(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Technology Radar");
         setResizable(true);
@@ -669,10 +768,29 @@ public class DesktopDemo extends JFrame {
 			@Override
 			public void componentResized(ComponentEvent e) {
 
+				if (
+						(int) Math.abs (jp.getWidth() - Config.baseDimension.getWidth()) > 0 ||
+								(int) Math.abs(jp.getHeight() - Config.baseDimension.getHeight()) > 0) {
+					double sf = getSF();
+					at.setToIdentity();
+					at.scale(sf, sf);
+					at.translate(
+							- 0.5 / sf * (sf * Config.baseDimension.getWidth() - jp.getWidth()),
+							- 0.5 / sf * (sf * Config.baseDimension.getHeight() - jp.getHeight()));
+					try {
+						ati = at.createInverse();
+					} catch (Exception e2) {
+						e2.printStackTrace(System.out);
+					}
+				} else {
+					at.setToIdentity();
+					ati.setToIdentity();
+				}
+
 				Rings.getInstance().calculateBasics(getCWidth(), getCHeight());
 				RoundGrid.init(Config.bigBangMoveSpeed);
+				Items.getInstance().animateToSquareInitSteps();
 				//initAfterGraphics(false);
-
 			}
 			
 			@Override
@@ -684,7 +802,7 @@ public class DesktopDemo extends JFrame {
 			}
 		});
         
-        addKeyListener(new KeyListener() {
+        kl = new KeyListener() {
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -726,7 +844,7 @@ public class DesktopDemo extends JFrame {
 					} else
 					if (c == 'i') {
 						Items.getInstance().toggleShowItems();
-						initAfterGraphics(true);
+						//initAfterGraphics(true);
 					} else
 					if (c == 'y') {
 						fileDialog();
@@ -767,7 +885,7 @@ public class DesktopDemo extends JFrame {
 					} else
 					if (c == 'z') {
 						if (! showSquare) {
-							initAfterGraphics(true);
+							initAfterGraphics(false);
 							Items.getInstance().animateToSquareInit();
 							showSquare = true;
 							moveToCircle = false;
@@ -788,6 +906,9 @@ public class DesktopDemo extends JFrame {
 							}
 							fractal.removeListenersAndThreads(sc);
 						}
+					}
+					if (c == 'X') {
+						resetState();
 					}
 
 					key(c);
@@ -847,9 +968,11 @@ public class DesktopDemo extends JFrame {
 					Items.getInstance().novaAnimateStart();
 				} else
 				if (c == '.') {
-					play= ! play;
+					play = ! play;
 					if (play) {
 						play();
+					} else {
+						playThread.interrupt();
 					}
 				} else
 				if (c == 'b') {
@@ -872,7 +995,9 @@ public class DesktopDemo extends JFrame {
 
 				//repaint();
 			}
-		});
+		};
+
+        addKeyListener(kl);
 
 		setPreferredSize(new Dimension(500, 500));
         pack();
@@ -1084,32 +1209,22 @@ public class DesktopDemo extends JFrame {
 	        	g2.setColor(fg);
 	        	g2.setBackground(bg);
 	        	if (Config.roundBack) {
-	            	g2.fillRect(0, 0, getCWidth(), getCHeight());
+	            	g2.fillRect(0, 0, jp.getWidth(), jp.getHeight());
 	            	g2.setColor(bg);
 	            	fillRadarArea(g2);
 	        		g2.setColor(fg);
 	        	} else {
-	            	g2.clearRect(0, 0, getCWidth(), getCHeight());
+	            	g2.clearRect(0, 0, jp.getWidth(), jp.getHeight());
 	        	}
 
 				if (
 						(int) Math.abs (jp.getWidth() - Config.baseDimension.getWidth()) > 0 ||
 								(int) Math.abs(jp.getHeight() - Config.baseDimension.getHeight()) > 0) {
-					double sf = getSF();
-					at.setToIdentity();
-					at.scale(sf, sf);
-					at.translate(
-							- 0.5 / sf * (sf * Config.baseDimension.getWidth() - jp.getWidth()),
-							- 0.5 / sf * (sf * Config.baseDimension.getHeight() - jp.getHeight()));
-					try {
-						ati = at.createInverse();
-					} catch (Exception e) {
-						e.printStackTrace(System.out);
-					}
 					g2.setTransform(at);
 				}
 
-				//System.out.println("2:" + (System.currentTimeMillis() - t));
+
+					//System.out.println("2:" + (System.currentTimeMillis() - t));
 	        	synchronized (itsLock) {
 	            	//System.out.println("3:" + (System.currentTimeMillis() - t));
 	       		//its = Items.getInstance();
@@ -1514,160 +1629,117 @@ public class DesktopDemo extends JFrame {
     };
     
     private void play() {
-    	new Thread() {
-    		@Override
-    		public void run() {
+		final DesktopDemo desktopDemoCopy = new DesktopDemo(false);
+		final Items itemsCopy = new Items();
+		DesktopDemo.copyState(this, desktopDemoCopy, Items.getInstance(), itemsCopy);
+    	final int wb = 5;
+    	playThread = new Thread() {
+			public void run() {
+			try {
+				while (play) {
+					// r, t, i, f, ' ', p, o, n
 
-    	    	try {
-		    	    if (simplifyArcs) {
-		    	    	toggleSimplifyArcs();
-			    		wait2 (3);
-		    	    }
-		    	    if (Items.getInstance().isOptimize()) {
-		    	    	Items.getInstance().toggleOptimize();
-			    		wait2 (3);
-		    	    }
-		    	    if (Items.getInstance().isShowItems()) {
-		    	    	Items.getInstance().toggleShowItems();
-			    		wait2 (3);
-		    	    }
-		    	    if (Items.getInstance().isShowPolygons()) {
-		    	    	Items.getInstance().togglePolygons();
-			    		wait2 (3);
-		    	    }
-		    	    if (Items.getInstance().isShowText()) {
-		    	    	Items.getInstance().toggleShowText();
-		    	    }
-		    	    if (!showRadar) {
-		    	    	showRadar = true;
-		    	    }
+					typeKey('X', wb/3, true);
+					while (showSquare) {
+						Thread.sleep(500);
+					}
 
-		    	    Robot robot = new Robot();
+					int cl = Cluster.values().length - Cluster.values().length / 2;
 
-		    	    while (play) {
-		    			// r, t, i, f, ' ', p, o, n
-		    	    	
-		    	    	int cl = Cluster.values().length - Cluster.values().length / 2;
-		
-			    	    pressSecondsW(robot, 'P', 0);	// show polygons
-			    	    pressSecondsW(robot, 'I', 0);	// show items
-			    	    pressSecondsW(robot, 'O', 4, true);	// slow optimize on
-			    	    pressSeconds(robot, 'M', 2);	// squeeze
-	    	    		wait2 (1);
-	    	    		pressSeconds(robot, 'N', 4);	// animate logo
-	    	    		wait2 (4);
-	    	    		pressSeconds(robot, 'B', 5);	// animate big bang
-	    	    		wait2 (4);
-			    	    for (int i = 0; i < Cluster.values().length / 2; i++) {
-		    	    		pressSecondsW(robot, 'K', 2);
-				    	    pressSeconds(robot, 'M', 2);
-		    	    		wait2 (2);
-			    	    }
-			    	    
-			    	    pressSeconds(robot, 'Z', 5);
+					typeKey('p', wb/3);	// show polygons
+					typeKey('l', wb/3);	// show lines
+					typeKey('i', wb/3);	// show items
+					typeKey('O', wb * 2, true);	// fast optimize on
+					pressKeyAndHold('m', wb);	// squeeze
+					wait2 (wb);
+					pressKeyAndHold('n', wb * 2);	// animate logo
+					wait2 (wb);
+					pressKeyAndHold('b', wb * 2);	// animate big bang
+					wait2 (wb);
+					for (int i = 0; i < Cluster.values().length / 2; i++) {
+						typeKey('k', wb);
+						pressKeyAndHold('m', wb);
+						wait2 (wb);
+					}
 
-			    	    pressSeconds(robot, 'M', 2);	// squeeze
-	    	    		wait2 (1);
-	    	    		pressSeconds(robot, 'N', 4);	// animate logo
-	    	    		wait2 (4);
-	    	    		pressSeconds(robot, 'B', 5);	// animate big bang
-	    	    		wait2 (4);
+					typeKey('z', wb * 2);
 
-			    	    for (int i = 0; i < cl; i++) {
-		    	    		pressSecondsW(robot, 'K', 2);
-				    	    pressSeconds(robot, 'M', 1);
-		    	    		wait2 (2);
-			    	    }
-			    	    pressSecondsW(robot, 'Z', 5);
-	
-			    	    pressSecondsW(robot, 'I', 2);	// hide items
-			    	    pressSecondsW(robot, 'P', 2);	// hide polygons
-	
-			    	    pressSecondsW(robot, 'O', 1, true);	// optimize off
-	    			}		    	    
-    	    	} catch (Exception e) { e.printStackTrace(System.out); }
-    		}
-    	}.start();
+					pressKeyAndHold('m', wb);	// squeeze
+					wait2 (wb);
+					pressKeyAndHold('n', wb * 2);	// animate logo
+					wait2 (wb);
+					pressKeyAndHold('b', wb);	// animate big bang
+					wait2 (wb);
+
+					for (int i = 0; i < cl; i++) {
+						typeKey('k', wb);
+						pressKeyAndHold('m', wb);
+						wait2 (wb);
+					}
+					typeKey('z', wb * 2);
+
+					typeKey('i', wb);	// hide items
+					typeKey('p', wb);	// hide polygons
+
+					typeKey('O', wb, true);	// optimize off
+				}
+			}
+			catch (InterruptedException ie) {
+				DesktopDemo.copyState(
+						desktopDemoCopy, DesktopDemo.this,
+						itemsCopy, Items.getInstance());
+			}
+			catch (Exception e) { e.printStackTrace(System.out); }
+		}};
+    	playThread.start();
     }
     
-    private void playShow() throws AWTException, InterruptedException {
-	    Robot robot = new Robot();
-
-	    while (play) {
-			// r, t, i, f, ' ', p, o, n
-    	    
-    	    pressSecondsW(robot, 'P', 1);	// show polygons
-    	    pressSecondsW(robot, 'I', 1);	// show items
-    	    pressSecondsW(robot, 'T', 2);	// show texts
-    	    pressSecondsW(robot, 'T', 1);	// hide texts	(original)
-    	    pressSecondsW(robot, 'O', 4);	// slow optimize on
-    	    pressSeconds(robot, 'M', 2);	// squeeze
-    		wait2 (3);
-    		pressSeconds(robot, 'N', 8);	// animate logo
-    		wait2 (2);
-    		pressSeconds(robot, 'B', 8);	// animate big bang
-    		wait2 (5);
-	    	toggleSimplifyArcs();			// simplify arcs
-    	    pressSecondsW(robot, 'O', 0);	// slow optimize off
-    	    pressSecondsW(robot, 'O', 0, true);	// fast optimize on
-    	    for (int i = 0; i < Cluster.values().length; i++) {
-	    		pressSecondsW(robot, 'K', 2);
-	    	    pressSeconds(robot, 'M', 2);
-	    		wait2 (5);
-    	    }
-    	    
-    	    pressSecondsW(robot, 'Z', 5);
-    		pressSeconds(robot, 'N', 8);	// animate logo
-    		wait2 (2);
-    	    pressSeconds(robot, 'B', 8);
-    		wait2 (2);
-    	    for (int i = 0; i < Cluster.values().length; i++) {
-	    		pressSecondsW(robot, 'K', 3);
-	    		wait2 (5);
-    	    }
-    	    pressSecondsW(robot, 'Z', 5);
-
-    	    pressSecondsW(robot, 'I', 2);	// hide items
-    	    pressSecondsW(robot, 'P', 2);	// hide polygons
-
-    	    pressSecondsW(robot, 'O', 1, true);	// optimize off
-		}		    	    
-    }
-    
-    private void pressSeconds(Robot robot, int keyEvent, int seconds) throws InterruptedException {
+    private void pressKeyAndHold(char keyChar, int seconds) throws InterruptedException {
 		try {
-			System.out.println(System.currentTimeMillis() + " pressing..." + keyEvent);
-			robot.keyPress(keyEvent);
+			System.out.println("key:" + keyChar);
+			//System.out.println(System.currentTimeMillis() + " pressing..." + keyEvent);
+			KeyEvent ke = new KeyEvent(this, -1, -1, -1, -1,keyChar);
+			kl.keyPressed(ke);
 			if (play)
 			Thread.sleep(seconds * 1000);
-			robot.keyRelease(keyEvent);
-			System.out.println(System.currentTimeMillis() + " releasing..." + keyEvent);
-		} catch (Exception e) {}
+			kl.keyReleased(ke);
+			kl.keyTyped(ke);
+			//System.out.println(System.currentTimeMillis() + " releasing..." + keyEvent);
+		}
+		catch (InterruptedException ie) { throw ie; }
+		catch (Exception e) {}
     }
 
     private void wait2(int seconds) throws InterruptedException {
 		try {
 			if (play)
 			Thread.sleep(seconds * 1000);
-		} catch (Exception e) {}
+		}
+		catch (InterruptedException ie) { throw ie; }
+		catch (Exception e) {}
     }
 
-    private void pressSecondsW(Robot robot, int keyEvent, int seconds) throws InterruptedException {
-    	pressSecondsW(robot, keyEvent, seconds, false);
+    private void typeKey(char keyChar, int seconds) throws InterruptedException {
+		typeKey(keyChar, seconds, false);
     }
-    private void pressSecondsW(Robot robot, int keyEvent, int seconds, boolean shift) throws InterruptedException {
+    private void typeKey(char keyChar, int seconds, boolean shift) throws InterruptedException {
+		KeyEvent ke = new KeyEvent(this, -1, -1, shift ? KeyEvent.VK_SHIFT : -1, -1,keyChar);
 		try {
-			if (shift) {
+			System.out.println("key:" + keyChar);
+			/*if (shift) {
 				robot.keyPress(KeyEvent.VK_SHIFT);
-			}
-			robot.keyPress(keyEvent);
-			robot.keyRelease(keyEvent);
-			if (shift) {
+			}*/
+			kl.keyPressed(ke);
+			kl.keyReleased(ke);
+			kl.keyTyped(ke);
+			/*if (shift) {
 				robot.keyRelease(KeyEvent.VK_SHIFT);
-			}
+			}*/
 			if (play)
 			Thread.sleep(seconds * 1000);
-		} catch (Exception e) {}
+		}
+		catch (InterruptedException ie) { throw ie; }
+		catch (Exception e) {}
     }
     
     private void toggleCluster(boolean forward) {
@@ -1716,6 +1788,7 @@ public class DesktopDemo extends JFrame {
     	addUsageText("s", "capture and animate screen", "");
     	addUsageText("F", "toggle enter search on/off (search string:" + searchString + ")", onOff(searchTyping));
     	addUsageText("F12", "toggle Fullscreen", onOff(isUndecorated()));
+    	addUsageText("X", "reset state", "");
     	String mic;
     	if (mouseInCluster != null) {
     		mic = mouseInCluster;
@@ -1775,7 +1848,7 @@ public class DesktopDemo extends JFrame {
 
 
     private void printInfoOnScreen(Items its, Graphics2D g) {
-    	//if (printUsage) 
+    	if (printUsage)
     	{
     		texts.clear();
 	    	updateUsageTexts(its);
