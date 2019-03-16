@@ -3,7 +3,7 @@ package radar.item;
 public enum Cluster {
 	
 	STRATEGIC_TOPIC("Strategic Topic", "tag 1 (e.g. category)"), 
-	CATEGORY("Kategorie", "tag 2 (e.g. type)"), 
+	CATEGORY("Category", "tag 2 (e.g. type)"),
 	//CA("CA", "tag 3 (e.g.business area)"),
 	TOPIC("Topic", "tag 4")
 	//,TOPIC_LEAD("Topic Lead", "tag 5")

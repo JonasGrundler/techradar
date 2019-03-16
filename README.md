@@ -1,5 +1,5 @@
-# techradar
-## Novatec Technology Radar
+# techradar (Novatec Technology Radar)
+## Introduction
 The Novatec Technology Radar is a tool helping us to visualize our idea of topics/technologies
 lifecycle. We strongly advise interested users to also look at the technology radar
 tools and idea of Throughtworks: https://www.thoughtworks.com/de/radar.\
@@ -11,6 +11,7 @@ Rings are used to show the status in the lifecycle of a particular topic. In gen
 topics go through the following lifecycle: observe, evaluate, build-up, work, reduce.
 However, some topics may not make it to evaluate (if they are not interesting for you).
 After topics have been in reduce for some time, they are thrown out.
+
 ![Rings](images/Rings-1.png "Rings")
 
 #### Observe
@@ -30,7 +31,19 @@ Those topics were important to us in the past. However, we still are working
 with them -- but to be honest: we'd like to get rid of them.
 
 ### Categorization
-TBD
+Categories help human beings to think, to talk about stuff. This is why we love to categorize.
+However, there might be different categories we may want to divide topics into:
+* Strategic Topic
+* Category
+* Topic
+
+Those categories above are part of this tool by default. The intention is:
+* Strategic Topic: A coarse granular distinction, like Security, Architecture, ...
+* Category: A more technical driven distinction - like frameworks, tools, languages, ...
+* Topic: A fine granular distinction
+
+## Usage
+Start with `java -jar target/techradar-latest.jar`.
 
 ### Basic features usage
 __b__ : play animation : black whole (animated when pressed)\
@@ -60,3 +73,6 @@ __X__ : reset state\
 __y__ : load file\
 __z__ : switch square/circle\
 __.__ : toggle animation : auto animation loop
+
+## Format of the Input-File
+TBD
