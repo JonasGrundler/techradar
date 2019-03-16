@@ -30,7 +30,7 @@ Those topics are relevant in our daily life.
 Those topics were important to us in the past. However, we still are working
 with them -- but to be honest: we'd like to get rid of them.
 
-### Categorization
+### Categorization (Clusters)
 Categories help human beings to think, to talk about stuff. This is why we love to categorize.
 However, there might be different categories we may want to divide topics into:
 * Strategic Topic
@@ -42,8 +42,11 @@ Those categories above are part of this tool by default. The intention is:
 * Category: A more technical driven distinction - like frameworks, tools, languages, ...
 * Topic: A fine granular distinction
 
+Note that we call categories (Clusters) within the visualization.
+
 ## Usage
-Start with `java -jar target/techradar-latest.jar`.
+Start with `java -jar target/techradar-latest.jar <filename>`.\
+If no filename is provided, a sample is loaded (part of the jar file).
 
 ### Basic features usage
 __b__ : play animation : black whole (animated when pressed)\
@@ -74,5 +77,50 @@ __y__ : load file\
 __z__ : switch square/circle\
 __.__ : toggle animation : auto animation loop
 
-## Format of the Input-File
-TBD
+## Format of the Input File
+The input file must be a `tab separated` table in the following format:
+
+<table align="left">
+  <tr>
+    <th>Deleted</td>
+    <th>Dup</td>
+    <th>Name</td>
+    <th>Description</td>
+    <th>Topic</td>
+    <th>Ring</td>
+    <th>Category</td>
+    <th>Strategic Topic</td>
+  </tr>
+  <tr>
+    <td>x</td>
+    <td></td>
+    <td>#BeyondBudgeting</td>
+    <td>Alternative Agile Management</td>
+    <td>Agility</td>
+    <td>observe</td>
+    <td>Methods & Organisationals</td>
+    <td>Agile Methoden</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>x</td>
+    <td>#Valuefirst</td>
+    <td>Apply in daily work.</td>
+    <td>Business Agility</td>
+    <td>evaluate</td>
+    <td>Methods & Organisationals</td>
+    <td>Agile Methoden</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td>12-factor</td>
+    <td>https://12factor.net, trying to follow the paradigm behind this</td>
+    <td>Cloud Native Development</td>
+    <td>work</td>
+    <td>Concepts (Technical)</td>
+    <td>Cloud</td>
+  </tr>
+</table>
+
+If you need to make changes to the clusters, have a look at class `Cluster`.

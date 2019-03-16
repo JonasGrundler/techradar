@@ -491,7 +491,7 @@ public class DesktopDemo extends JFrame {
         	String[] headers = line.split("\t");
         	while ((line = r.readLine()) != null) {
         		System.out.println(line);
-        		// Name	Größe (0-4)	Percentage	Moving	Ring	Kategorie	Topic	CA	Kommentar
+        		// Deleted	Dup	Name	Description	Topic	Ring	Category	Strategic Topic
         		
         		String[] p = line.split("\t");
         		int ring = -1;
