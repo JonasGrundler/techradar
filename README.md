@@ -11,7 +11,8 @@ Rings are used to show the status in the lifecycle of a particular topic. In gen
 topics go through the following lifecycle: observe, evaluate, build-up, work, reduce.
 However, some topics may not make it to evaluate (if they are not interesting for you).
 After topics have been in reduce for some time, they are thrown out.
-[images/Rings-1.png]
+![Rings](images/Rings-1.png "Rings")
+
 #### Observe
 In this ring you put all the topics that could be interesting to look at.
 
