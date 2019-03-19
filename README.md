@@ -2,7 +2,7 @@
 ## Introduction
 The Novatec Technology Radar is a tool helping us to visualize our idea of topics/technologies
 lifecycle. We strongly advise interested users to also look at the technology radar
-tools and idea of Throughtworks: https://www.thoughtworks.com/de/radar.\
+tools and idea of Throughtworks: https://www.thoughtworks.com/de/radar.
 Also, keep in mind that the Novatec Technology Radar is a way to present your own view
 on the lifecycle of a topic/technology. Someone else might have a completely different
 view. It depends on your usage and your business case(s).
