@@ -227,7 +227,7 @@ public class Items {
 		itemsTo.itemsByRingSortedByWinkel.clear();
 
     	while (itemsFrom.items.size() > itemsTo.items.size()) {
-			itemsTo.items.add(new Item(0, "", 0, 0, null));
+			itemsTo.items.add(new Item(0, "", "", 0, 0, null, null));
     	}
     	while (itemsTo.items.size() > itemsFrom.items.size()) {
 			itemsTo.items.remove(itemsTo.items.size() - 1 );
@@ -270,7 +270,9 @@ public class Items {
 				itemsTo.getCim().get(it.getClusterValue()).addAfterCopy(itCopy);
 			}
     	}
-		itemsTo.itemsByRing.get(itemsFrom.itemsByRing.size() - 1).add(itemsFrom.itemsByRing.get(itemsFrom.itemsByRing.size() - 1).get(0));
+    	if (itemsFrom.itemsByRing.size() > 0) {
+			itemsTo.itemsByRing.get(itemsFrom.itemsByRing.size() - 1).add(itemsFrom.itemsByRing.get(itemsFrom.itemsByRing.size() - 1).get(0));
+		}
     }
     
 	
@@ -366,8 +368,8 @@ public class Items {
     	return itemCreated(new Item(item));
     }
 	
-	public synchronized Item create (int ring, String text, int size, int percentage, Map<Cluster, String> values) {
-		Item item = new Item(ring, text, size, percentage, values);
+	public synchronized Item create (int ring, String text, String description, int size, int percentage, Map<Cluster, String> values, String assignee) {
+		Item item = new Item(ring, text, description, size, percentage, values, assignee);
 		return itemCreated(item);
 	}
 
@@ -1310,7 +1312,10 @@ public class Items {
     public synchronized String setTooltipText(Point2D p) {
     	for (Item item : items) {
         	if (item.containsForTooltip(p, showText, showItems)) {
-        		return item.getText();
+        		if (item.getDescription() != null) {
+        			return item.getDescription();
+				}
+        		return item.getName();
     		}
     	}
     	return null;

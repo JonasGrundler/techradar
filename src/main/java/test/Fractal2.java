@@ -868,7 +868,6 @@ public class Fractal2 {
 			//f.loadImage("C:\\Users\\jg\\Downloads\\p1.bmp");
 			//f.loadCharacters("0123456789");
 			//f.loadCharacters("+-+-");
-			//f.loadStrings(new String[]{"Lilian", "Leonie", "Jun", "Jonas"});
 			//f.loadStrings(new String[]{"Novatec", "Beratung", "Software Entwicklung", "Cloud", "IoT", "Blockchain"});
 			//f.loadImage("C:\\Users\\jg\\Downloads\\complex.bmp");
 			//f.loadImage("C:\\Users\\jg\\Downloads\\kotlin_250x250_3.bmp");

@@ -93,7 +93,7 @@ public class ClusterInfo {
 			addCenter(item.getCenter());
 			calculate();
 		} else {
-			throw new IllegalStateException("item:" + item.getText());
+			throw new IllegalStateException("item:" + item.getName());
 		}
     	//polygonInvalidate();
 	}
@@ -310,7 +310,7 @@ public class ClusterInfo {
     	{
 	    	while (l.size() < 3) {
 	    		l = new ArrayList<>(l);
-	    		Item i = new Item(0, "", 0, 0, null);
+	    		Item i = new Item(0, "", "", 0, 0, null, null);
 	    		Point2D p = new Point2D.Double(
 						(l.get(0).getArcCenter().getX() + l.get(l.size() - 1).getArcCenter().getX()) / 2,
 						(l.get(0).getArcCenter().getY() + l.get(l.size() - 1).getArcCenter().getY()) / 2);

@@ -10,9 +10,12 @@ import radar.ring.Rings;
 
 public class Item {
 	
-	private String text;
+	private String name;
+	private String description;
 	private boolean placeholder;
 	private int size;
+	private String assignee;
+
 	// any...
 	private Map<Cluster, String> values; // = new HashMap<>();
 	private int percentage;
@@ -45,9 +48,11 @@ public class Item {
 	private ClusterInfo clusterInfo;
 	
 	public void copyInto(Item item, ClusterInfo ci, boolean deep) {
-		item.text = text;
+		item.name = name;
+		item.description = description;
 		item.placeholder = placeholder;
 		item.size = size;
+		item.assignee = assignee;
 		/*
 		if (item.values != null) {
 			item.values.clear();
@@ -92,7 +97,7 @@ public class Item {
 	}
 	
 	protected Item (Item item) {
-		this (item.ring, item.text, item.size, item.percentage, item.values);
+		this (item.ring, item.name, item.description, item.size, item.percentage, item.values, item.assignee);
 		this.arcDegree = item.arcDegree;
 		this.center.setLocation(item.center);
 		this.length = item.length;
@@ -102,12 +107,14 @@ public class Item {
 		this.winkelNr = item.winkelNr;
 	}
 	
-	protected Item (int ring, String text, int size, int percentage, Map<Cluster, String> values) {
+	protected Item (int ring, String text, String description, int size, int percentage, Map<Cluster, String> values, String assignee) {
 		this.ring = ring;
-		this.text = text;
+		this.name = text;
+		this.description = description;
 		this.size = size;
 		this.percentage = percentage;
 		this.values = values;
+		this.assignee = assignee;
 	}
 	
 	protected Item (int ring) {
@@ -271,10 +278,14 @@ public class Item {
 		this.lengthCircle = lengthCircle;
 	}
 	
-	public String getText() {
-		return text;
+	public String getName() {
+		return name;
 	}
-	
+
+	public String getDescription() {
+		return description;
+	}
+
 	public boolean isPlaceholder() {
 		return placeholder;
 	}
@@ -293,7 +304,7 @@ public class Item {
 	
 	public void initGraphics(Graphics2D g) {
 		if (! placeholder) {
-			textBounds = g.getFontMetrics().getStringBounds(text, g).getBounds();
+			textBounds = g.getFontMetrics().getStringBounds(name, g).getBounds();
 		}
 	}
 	
@@ -490,12 +501,14 @@ public class Item {
 	
 	@Override
 	public String toString() {
-		return "Item: {" + text + ", " + values + ", " + ring + "}";
+		return "Item: {" + name + ", " + values + ", " + ring + "}";
 	}
 	
 	public ClusterInfo getClusterInfo() {
 		return clusterInfo;
 	}
-	
-	
+
+	public String getAssignee() {
+		return assignee;
+	}
 }

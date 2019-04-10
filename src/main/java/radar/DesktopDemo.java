@@ -14,12 +14,6 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,11 +24,9 @@ import java.util.SortedMap;
 import java.util.Stack;
 import java.util.TreeMap;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.ToolTipManager;
-import javax.swing.WindowConstants;
+import javax.swing.*;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
 import radar.item.Cluster;
 import radar.item.ClusterInfo;
@@ -62,7 +54,7 @@ public class DesktopDemo extends JFrame {
     private boolean changeColors = true;
 
     
-    private static final String PLACEHOLDER = "placeholder";
+    public static final String PLACEHOLDER = "placeholder";
     
     private boolean play = false;
     
@@ -119,6 +111,11 @@ public class DesktopDemo extends JFrame {
 	private Thread playThread;
 
 	private KeyListener kl;
+
+	private ItemIO itemIO;
+
+    private boolean showMyItemsOnly = false;
+    private String jiraUser =  null;
 
 	private static void copyState(
 			DesktopDemo demoFrom, DesktopDemo demoTo,
@@ -195,8 +192,10 @@ public class DesktopDemo extends JFrame {
          * Creates new form DesktopDemo
          */
     public DesktopDemo(boolean init) {
+    	itemIO = new ItemIO();
     	if (init) {
-			init(DesktopDemo.class.getClassLoader().getResourceAsStream("sampleData.txt"));
+			itemIO.initFromInputStream(DesktopDemo.class.getClassLoader().getResourceAsStream("sampleData.txt"), false);
+			switchTmpItems();
 			initComponents();
 			initAfterGraphics(true);
 			Items.getInstance().animateToSquareInitSteps();
@@ -220,26 +219,6 @@ public class DesktopDemo extends JFrame {
 		//}
     }
 
-    private void init(InputStream is) {
-    	BufferedReader br;
-		try {
-			br = new BufferedReader(new InputStreamReader(is));
-	        initItems(br);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    }
-
-    private void init(String filename) {
-    	BufferedReader br;
-		try {
-			br = new BufferedReader(new FileReader(new File(filename)));
-	        initItems(br);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-    }
-    
     private void runRadarAndRampUpAndDegree3() {
     	Thread thread = new Thread() {
     		public void run() {
@@ -413,18 +392,7 @@ public class DesktopDemo extends JFrame {
 		return value;
 	}*/
     
-    private boolean anonymizeHeader(String name) {
-    	if (
-    			name.equals("Größe (0-4)") || 
-    			name.equals("Percentage") ||
-    			name.equals("Ring")
-    	) {
-    		return false;
-    	}
-    	return true;
-    }
 
-    
     /*
     private Map<String, String> anonymizedHeaders = new HashMap<>();
     private String getAnonymizedHeader(String name) {
@@ -448,109 +416,6 @@ public class DesktopDemo extends JFrame {
 		}
 		return anonymizedHeader;
     }*/
-    
-    private String getValue(String name, String defaultStr, String[] tokens, String[] headers) {
-    	for (int i = 0; i < headers.length; i++) {
-    		if (
-    				name.equals(headers[i])
-    		) {
-    			if (i >= tokens.length) {
-    				return defaultStr;
-    			} else {
-    				return tokens[i];
-    			}
-    		}
-    	}
-    	return defaultStr;
-    }
-    
-    private Map<String, Map<String, String>> anonymizedValues = new HashMap<>();
-    private String getAnonymizedValue(String name, String value, String pfx) {
-    	if (! anonymizeHeader(name)) {
-    		return value;
-    	}
-    	Map<String, String> m = anonymizedValues.get(name);
-    	if (m == null) {
-    		m = new HashMap<>();
-    		anonymizedValues.put(name, m);
-    	}
-    	String anonymizedValue = m.get(value);
-    	if (anonymizedValue == null) {
-    		anonymizedValue = pfx + "-" + (m.size() + 1);
-    		m.put(value, anonymizedValue);
-    	}
-    	return anonymizedValue;
-    }
-    
-    private synchronized void initItems(BufferedReader r) {
-    	String line = null;
-        Cluster.setAnonymize(false);
-        try {
-        	Items.resetTmpInstance();
-        	line = r.readLine();
-        	String[] headers = line.split("\t");
-        	while ((line = r.readLine()) != null) {
-        		System.out.println(line);
-        		// Deleted	Dup	Name	Description	Topic	Ring	Category	Strategic Topic
-        		
-        		String[] p = line.split("\t");
-        		int ring = -1;
-        		
-        		String deleted = getValue("Deleted", "", p, headers).trim();
-    			String dup = getValue("Dup", "", p, headers);
-
-        		if (deleted.length() == 0 && dup.length() == 0) {
-	        		String ringText = getValue("Ring", null, p, headers);
-	    			for (int i = 0; i < Config.texts.length; i++) {
-						if (ringText.equals(Config.texts[i])) {
-							ring = i;
-						}
-	    			}
-	    			
-	    			Map<Cluster, String> values = new HashMap<>();
-	    			
-	    			for (Cluster cluster : Cluster.values()) {
-	    				values.put(cluster, getValue(cluster.getColumn(), "default", p, headers));
-	    			}
-	        		
-	    			String category = getValue(Cluster.CATEGORY.getColumn(), null, p, headers);
-	    			if (category == null) {
-	    				System.out.println("oops");
-	    			}
-	        		if (category.equals(PLACEHOLDER)) {
-	        			category = PLACEHOLDER;
-	        			Items.getTmpInstance().create (ring);
-	        		} else {
-	        			String name = getValue("Name", null, p, headers);
-	        			int groesse = Integer.parseInt(getValue("Size (0-4)", "2", p, headers));
-	        			int percentage = Integer.parseInt(getValue("Percentage", "100", p, headers));
-	        			if (Config.anonymized) {
-	        				name = getAnonymizedValue("Itemname", name, "item");
-	        				Map<Cluster, String> values2 = new HashMap<>();
-	        				for (Entry<Cluster, String> e : values.entrySet()) {
-	        					values2.put(e.getKey(), getAnonymizedValue(e.getKey().getRawColumn(), e.getValue(), "group"));
-	        				}
-	        				values = values2;
-	        			}
-	        			Items.getTmpInstance().create(
-		        				ring, 
-		        				name, 
-		        				groesse,
-		        				percentage,
-		        				values
-		        		);
-	        		}
-        		}
-        	}
-        	r.close();
-        } catch (Exception e) {
-        	System.out.println("line:" + line);
-        	e.printStackTrace(System.out);
-        }
-        Cluster.setAnonymize(Config.anonymized);
-        switchTmpItems();
-        System.out.println("items read");
-    }
     
     private void switchTmpItems() {
         Items.switchInstance();
@@ -587,7 +452,8 @@ public class DesktopDemo extends JFrame {
             		dd.fileDialog();
             	}*/
             	if (filename != null) {
-            		dd.init(filename);
+            		dd.itemIO.initFromFilename(filename, false);
+            		dd.switchTmpItems();
             	}
 			}
         });
@@ -619,11 +485,50 @@ public class DesktopDemo extends JFrame {
         		  System.out.println("You chose " + filename);
         		}
             	if (filename != null) {
-            		init(filename);
+            		itemIO.initFromFilename(filename, false);
+            		switchTmpItems();
             	}
             }
         });
     }
+
+    public void usernamePasswordDialog() {
+		JLabel label_login = new JLabel("Username:");
+		final JTextField login = new JTextField();
+		if (jiraUser != null) {
+		    login.setText(jiraUser);
+        }
+		login.addAncestorListener(new AncestorListener() {
+            @Override
+            public void ancestorAdded(AncestorEvent ancestorEvent) {
+                login.requestFocus();
+            }
+
+            @Override
+            public void ancestorRemoved(AncestorEvent ancestorEvent) {
+            }
+
+            @Override
+            public void ancestorMoved(AncestorEvent ancestorEvent) {
+            }
+        });
+
+		JLabel label_password = new JLabel("Password:");
+		JPasswordField password = new JPasswordField();
+
+		Object[] array = { label_login,  login, label_password, password };
+
+		int res = JOptionPane.showConfirmDialog(this, array, "Login",
+				JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
+
+		if (res == JOptionPane.OK_OPTION) {
+		    jiraUser = login.getText().trim();
+			itemIO.setUsernamePassword(login.getText().trim(), new String(password.getPassword()));
+		}
+
+		//login.requestFocus();
+	}
     
     private synchronized void drillIn() {
 		if (mouseInCluster != null) {
@@ -991,7 +896,15 @@ public class DesktopDemo extends JFrame {
 				}  else
 				if (e.getKeyCode() == KeyEvent.VK_F12) {
 					toggleDecoration();
-				}
+				} else
+				if (e.getKeyCode() == KeyEvent.VK_F5) {
+					usernamePasswordDialog();
+					itemIO.initFromJira();
+					switchTmpItems();
+				} else
+				if (e.getKeyCode() == KeyEvent.VK_F6) {
+				    toggleShowMyItemsOnly();
+                }
 
 				//repaint();
 			}
@@ -1003,7 +916,7 @@ public class DesktopDemo extends JFrame {
         pack();
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		graphicsInitialized = true;
-		RoundGrid.init(Config.bigBangMoveSpeed);
+		//RoundGrid.init(Config.bigBangMoveSpeed);
 	}
 
 	private void toggleDecoration() {
@@ -1014,6 +927,10 @@ public class DesktopDemo extends JFrame {
 		setLocation(new Point(0, 0));
 		setVisible(true);
 	}
+
+	private void toggleShowMyItemsOnly() {
+        showMyItemsOnly = ! showMyItemsOnly;
+    }
     
     private void animateScreenCapture() {
     	int currentScs = 1;
@@ -1201,9 +1118,9 @@ public class DesktopDemo extends JFrame {
 	        	//g2.setTransform(at);
 	        	
 	        	g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	        	g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-	        	g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-	        	g2.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+	        	//g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+	        	//g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+	        	//g2.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
 	        	
 	        	//super.paint(g);
 	        	g2.setColor(fg);
@@ -1388,7 +1305,7 @@ public class DesktopDemo extends JFrame {
 		        	// Ringe big bang
 		    		if (its.isShowBigBangAnimation() || its.isShowBigBangAnimation2())
 		        	{
-			        	g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			        	//g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			        	for (int i = 0; i < Rings.getInstance().getSizes().length; i++) {
 			        		double mult = Rings.getInstance().getBigBangMultis()[i][0];
 			        		double size = Rings.getInstance().getSizes()[i];
@@ -1435,7 +1352,8 @@ public class DesktopDemo extends JFrame {
 			        	for (Item item : its.getItems()) {
 			        		if (
 			        				item.isPlaceholder() ||
-			        				(searchString != null && searchString.length() > 0 && item.getText().toLowerCase().indexOf(searchStringString) < 0)
+			        				(searchString != null && searchString.length() > 0 && item.getName().toLowerCase().indexOf(searchStringString) < 0) ||
+                                    (showMyItemsOnly && jiraUser != null && (item.getAssignee() == null || ! item.getAssignee().equals(jiraUser)))
 			        			) {
 			        			/*g2.setColor(new Color(32, 32, 32));
 			            		g2.fillRect(
@@ -1458,7 +1376,7 @@ public class DesktopDemo extends JFrame {
 					            		} else {
 					        	        	g2.setFont(new Font("default", Font.PLAIN, 12));
 					            		}
-					            		g2.drawString(item.getText(), 
+					            		g2.drawString(item.getName(),
 					            				(int) (tc.getX() - item.getTextBounds().getWidth()/2 - 1),
 					            				(int) (tc.getY() - item.getTextBounds().getHeight()/2 - 1)
 					            		);
@@ -1510,7 +1428,7 @@ public class DesktopDemo extends JFrame {
 					        	        	g2.setFont(new Font("default", Font.PLAIN, 12));
 					            		}
 			            				Point2D tc = item.getTextCenter();
-					            		g2.drawString(item.getText() /*+ "_" + item.getWinkelNr() + "." +item.getSubRing()*/, 
+					            		g2.drawString(item.getName() /*+ "_" + item.getWinkelNr() + "." +item.getSubRing()*/,
 					            				(int) (tc.getX() - item.getTextBounds().getWidth()/2),
 					            				(int) (tc.getY() - item.getTextBounds().getHeight()/2)
 					            		);
@@ -1643,6 +1561,7 @@ public class DesktopDemo extends JFrame {
 					while (showSquare) {
 						Thread.sleep(500);
 					}
+					typeKey('?', wb/3);	// show polygons
 
 					int cl = Cluster.values().length - Cluster.values().length / 2;
 
@@ -1787,6 +1706,8 @@ public class DesktopDemo extends JFrame {
     	addUsageText("z", "switch square/circle", "");
     	addUsageText("s", "capture and animate screen", "");
     	addUsageText("F", "toggle enter search on/off (search string:" + searchString + ")", onOff(searchTyping));
+		addUsageText("F5", "load from Jira","");
+        addUsageText("F6", "toggle show my items only",onOff(showMyItemsOnly));
     	addUsageText("F12", "toggle Fullscreen", onOff(isUndecorated()));
     	addUsageText("X", "reset state", "");
     	String mic;
