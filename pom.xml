@@ -6,17 +6,10 @@
 
     <groupId>info.novatec</groupId>
     <artifactId>techradar</artifactId>
-    <packaging>jar</packaging>
+    <!-- <packaging>jar</packaging> -->
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
-        <!--
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>2.28</version>
-        </dependency>
-        -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -38,6 +31,30 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>radar.DesktopDemo</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.1.1</version>
                 <configuration>
@@ -48,6 +65,7 @@
                     </archive>
                 </configuration>
             </plugin>
+            -->
         </plugins>
     </build>
 

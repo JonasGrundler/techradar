@@ -66,7 +66,7 @@ public class ItemIO {
             //unused   unused  summary  description   Topic   status   customfield_13501  "Strategic Topic"
             response = get("/rest/api/2/search?" +
                     "jql=project=NTTR+and+status+in+(Observe,Evaluate,Build-Up,Work,Reduce)&maxResults=5000" +
-                    "&fields=key,summary,description,status,customfield_13501,customfield_13502,customfield_13503,assignee");
+                    "&fields=key,summary,customfield_13513,status,customfield_13501,customfield_13502,customfield_13503,assignee");
             JSONArray issues = response.getJSONArray("issues");
             List<Map<String, Object>> l = readItems (issues, true);
             initItems(l);
@@ -145,7 +145,7 @@ public class ItemIO {
                     //if (category !=  DesktopDemo.PLACEHOLDER)
                     {
                         item.put("Name", fields.getString("summary"));
-                        Object desc = fields.get("description");
+                        Object desc = fields.get("customfield_13513");
                         if (desc instanceof String) {
                             item.put("Description", desc);
                         }
@@ -577,7 +577,7 @@ public class ItemIO {
         CloseableHttpClient httpclient = HttpClients.createDefault();
 
         HttpPut httpPut = new HttpPut(jiraHost + uri);
-        UsernamePasswordCredentials creds = new UsernamePasswordCredentials(username, password;
+        UsernamePasswordCredentials creds = new UsernamePasswordCredentials(username, password);
 
         StringEntity entity = new StringEntity(payload.toString(), "UTF-8");
         httpPut.setEntity(entity);

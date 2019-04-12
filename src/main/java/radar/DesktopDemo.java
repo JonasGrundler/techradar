@@ -493,7 +493,7 @@ public class DesktopDemo extends JFrame {
     }
 
     public void usernamePasswordDialog() {
-		JLabel label_login = new JLabel("Username:");
+		JLabel label_login = new JLabel("Jira Username (short name):");
 		final JTextField login = new JTextField();
 		if (jiraUser != null) {
 		    login.setText(jiraUser);
@@ -518,7 +518,7 @@ public class DesktopDemo extends JFrame {
 
 		Object[] array = { label_login,  login, label_password, password };
 
-		int res = JOptionPane.showConfirmDialog(this, array, "Login",
+		int res = JOptionPane.showConfirmDialog(this, array, "Login to Novatec Jira",
 				JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
