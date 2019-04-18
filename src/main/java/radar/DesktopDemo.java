@@ -194,7 +194,9 @@ public class DesktopDemo extends JFrame {
     public DesktopDemo(boolean init) {
     	itemIO = new ItemIO();
     	if (init) {
-			itemIO.initFromInputStream(DesktopDemo.class.getClassLoader().getResourceAsStream("sampleData.txt"), false);
+    		if (! itemIO.initFromLastJiraRequest()) {
+				itemIO.initFromInputStream(DesktopDemo.class.getClassLoader().getResourceAsStream("sampleData.txt"), false);
+			}
 			switchTmpItems();
 			initComponents();
 			initAfterGraphics(true);

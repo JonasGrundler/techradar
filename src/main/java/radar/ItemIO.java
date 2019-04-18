@@ -60,6 +60,32 @@ public class ItemIO {
         }
     }
 
+    public boolean initFromLastJiraRequest() {
+        try {
+            File responseFile = new File("Jira-Response-TechRadar.json");
+            if (! responseFile.exists()) {
+                return false;
+            }
+            BufferedReader br = new BufferedReader(new FileReader(responseFile));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+                sb.append("\n");
+            }
+            br.close();
+            JSONObject response = new JSONObject(sb.toString());
+
+            initFromJiraResponse(response);
+
+            System.out.println("loaded from last Jira response");
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }
+        return false;
+    }
+
     public void initFromJira() {
         JSONObject response = new JSONObject();
         try {
@@ -67,6 +93,22 @@ public class ItemIO {
             response = get("/rest/api/2/search?" +
                     "jql=project=NTTR+and+status+in+(Observe,Evaluate,Build-Up,Work,Reduce)&maxResults=5000" +
                     "&fields=key,summary,customfield_13513,status,customfield_13501,customfield_13502,customfield_13503,assignee");
+
+            initFromJiraResponse(response);
+
+            File responseFile = new File("Jira-Response-TechRadar.json");
+            System.out.println("Writing Jira Response to " + responseFile.getAbsolutePath());
+            BufferedWriter bw = new BufferedWriter(new FileWriter(responseFile));
+            bw.write(response.toString());
+            bw.close();
+        } catch (Exception e) {
+            System.out.println("response:" + response.toString());
+            e.printStackTrace(System.out);
+        }
+    }
+
+    public void initFromJiraResponse(JSONObject response) {
+        try {
             JSONArray issues = response.getJSONArray("issues");
             List<Map<String, Object>> l = readItems (issues, true);
             initItems(l);
@@ -98,6 +140,8 @@ public class ItemIO {
             System.out.println("issue[" + issue.get("key") + ", " + fields.get("summary"));
         }
         */
+
+
 
         List<Map<String, Object>> items = new ArrayList<>();
         Cluster.setAnonymize(false);
@@ -220,7 +264,7 @@ public class ItemIO {
                         item.put("Description", getValue("Description", null, p, headers));
                         item.put("Size (0-4)", getValue("Size (0-4)", "2", p, headers));
                         item.put("Percentage", getValue("Percentage", "100", p, headers));
-                        item.put("assignee", getValue("Nicht bekannt", null, p, headers));
+                        item.put("Assignee", getValue("Unknown", null, p, headers));
                         Map<Cluster, String> values = new HashMap<>();
                         for (Cluster cluster : Cluster.values()) {
                             values.put(cluster, getValue(cluster.getColumn(), null, p, headers));
