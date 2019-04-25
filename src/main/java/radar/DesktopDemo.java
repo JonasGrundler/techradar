@@ -92,7 +92,7 @@ public class DesktopDemo extends JFrame {
     
     private List<String> texts = new ArrayList<>();
     
-    private Object itsLock = new Object();
+    //private Object itsLock = new Object();
 	private Items its = Items.getInstance();
 	
 	private boolean showScreenCapture = false;
@@ -225,7 +225,12 @@ public class DesktopDemo extends JFrame {
     	Thread thread = new Thread() {
     		public void run() {
     			long t = 0;
-	    		while (true) {
+    			List<Items> itsList = new ArrayList<>();
+    			for (int i = 0; i < 63; i++) {
+					itsList.add(new Items());
+				}
+    			int itemsIdx = 0;
+				while (true) {
 	    			try {
 	    				if (System.currentTimeMillis() - lastFpsMeasure >= 1000) {
 	    					fps = fpsCount;
@@ -239,17 +244,18 @@ public class DesktopDemo extends JFrame {
 	    				}
 	    				t = System.currentTimeMillis();
 	    				if (!showScreenCapture) {
-		    				Items its2 = new Items();
+	    					itemsIdx = (itemsIdx + 1) % itsList.size();
+		    				Items its2 = itsList.get(itemsIdx);
 		    				Items.copyState(Items.getInstance(), its2, false);
-		    				synchronized (itsLock) {
+		    				//synchronized (itsLock) {
 		    					its = its2;
-		    				}
-		    				repaint();
-		    				/*synchronized (fpsLock) {
-		    					try {
-		    						fpsLock.wait(Config.paintWait);
-		    					} catch (InterruptedException e) {}
-		    				}*/
+		    				//}
+		    				//synchronized (fpsLock) {
+		    				//	try {
+									repaint();
+		    						//fpsLock.wait(Config.paintWait);
+		    				//	} catch (Exception e) {}
+		    				//}
 	    				} else {
 	    					if (fractal != null && fractal.isEnded()) {
 	    						showScreenCapture = false;
@@ -1144,7 +1150,8 @@ public class DesktopDemo extends JFrame {
 
 
 					//System.out.println("2:" + (System.currentTimeMillis() - t));
-	        	synchronized (itsLock) {
+	        	//synchronized (itsLock)
+				{
 	            	//System.out.println("3:" + (System.currentTimeMillis() - t));
 	       		//its = Items.getInstance();
 	        	
