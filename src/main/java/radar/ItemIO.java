@@ -180,9 +180,10 @@ public class ItemIO {
                     if (fields.has("customfield_13501") && fields.get("customfield_13501") instanceof JSONObject) {
                         category = fields.getJSONObject("customfield_13501").getString("value");
                     }
-                    if (category != null) {
-                        item.put(Cluster.CATEGORY.getColumn(), category);
+                    if (category == null || category.trim().length() == 0) {
+                        category = "undefined";
                     }
+                    item.put(Cluster.CATEGORY.getColumn(), category);
                     if (fields.has("assignee") && fields.get("assignee") instanceof JSONObject) {
                         item.put("Assignee", fields.getJSONObject("assignee").getString("name"));
                     }
@@ -254,7 +255,7 @@ public class ItemIO {
                     items.add(item);
                     String ringText = getValue("Ring", null, p, headers);
                     item.put("Ring", ringText);
-                    String category = getValue(Cluster.CATEGORY.getColumn(), null, p, headers);
+                    String category = getValue(Cluster.CATEGORY.getColumn(), "undefined", p, headers);
                     if (category != null && category.equals(DesktopDemo.PLACEHOLDER)) {
                         category = DesktopDemo.PLACEHOLDER;
                     }

@@ -215,7 +215,7 @@ public class Items {
 		itemsTo.lastClusterMove.clear();
 		itemsTo.lastItemMove.clear();
 
-		itemsTo.squareAdditionRadiusSteps = new ArrayList(itemsFrom.squareAdditionRadiusSteps);
+		itemsTo.squareAdditionRadiusSteps = itemsFrom.squareAdditionRadiusSteps;
 
 		itemsTo.roundBack = itemsFrom.roundBack;
 
@@ -255,6 +255,7 @@ public class Items {
 				itemsTo.itemsByRingAndSubringSortedByWinkel.get(i).add(new TreeMap<>());
     		}
     	}
+
     	for (int i = 0; i < itemsFrom.items.size(); i++) {
     		Item it = itemsFrom.items.get(i);
     		Item itCopy = itemsTo.items.get(i);

@@ -20,7 +20,7 @@ public class Config {
     public static final boolean roundBack = false;
     public static final double optimizationReductionSpeed = 0.00000001;
     public static final double optimizationReductionSpeed2 = 0.00000001;
-    public static final double stepToTargetLocationSpeed = 0.990;
+    public static final double stepToTargetLocationSpeed = 0.980;
     public static final boolean anonymized = false;
     public static final double stepToSquareSpeed = 12;
     public static final int polygonAlpha = 128;
