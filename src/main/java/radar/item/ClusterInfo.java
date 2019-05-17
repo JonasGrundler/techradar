@@ -369,7 +369,7 @@ public class ClusterInfo {
 		        			if (diff <= wd) {
 		        				if (
 		        						diff < wd || 
-		        						next != null && 
+		        						next != null && last != null &&
 		        						last.getArcCenter().distance(item.getArcCenter()) > last.getArcCenter().distance(next.getArcCenter())) {
 			        				next = item;
 			        				wd = diff;

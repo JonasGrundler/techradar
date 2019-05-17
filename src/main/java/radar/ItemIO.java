@@ -14,10 +14,7 @@ import radar.item.Cluster;
 import radar.item.Items;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ItemIO {
 
@@ -26,6 +23,8 @@ public class ItemIO {
     private static final String jiraHost = "http://jira.novatec-gmbh.de";
     private String username;
     private String password;
+
+    private List<Map<String, Object>> fromJira;
 
     {
         // "reduce", "work", "build-up", "evaluate", "observe"
@@ -60,9 +59,9 @@ public class ItemIO {
         }
     }
 
-    public boolean initFromLastJiraRequest() {
+    public boolean initFromLastJiraRequest(boolean TRStatusRestriction) {
         try {
-            File responseFile = new File("Jira-Response-TechRadar.json");
+            File responseFile = new File("Jira-Response-TechRadar-" + TRStatusRestriction + ".json");
             if (! responseFile.exists()) {
                 return false;
             }
@@ -86,17 +85,23 @@ public class ItemIO {
         return false;
     }
 
-    public void initFromJira() {
+    public void initFromJira(boolean TRStatusOnly) {
         JSONObject response = new JSONObject();
         try {
             //unused   unused  summary  description   Topic   status   customfield_13501  "Strategic Topic"
+            String statusRestriction;
+            if (TRStatusOnly) {
+                statusRestriction = "+and+status+in+(Observe,Evaluate,Build-Up,Work,Reduce)";
+            } else{
+                statusRestriction = "";
+            }
             response = get("/rest/api/2/search?" +
-                    "jql=project=NTTR+and+status+in+(Observe,Evaluate,Build-Up,Work,Reduce)&maxResults=5000" +
+                    "jql=project=NTTR" + statusRestriction + "&maxResults=5000" +
                     "&fields=key,summary,customfield_13513,status,customfield_13501,customfield_13502,customfield_13503,assignee");
 
             initFromJiraResponse(response);
 
-            File responseFile = new File("Jira-Response-TechRadar.json");
+            File responseFile = new File("Jira-Response-TechRadar-" + TRStatusOnly + ".json");
             System.out.println("Writing Jira Response to " + responseFile.getAbsolutePath());
             BufferedWriter bw = new BufferedWriter(new FileWriter(responseFile));
             bw.write(response.toString());
@@ -111,6 +116,7 @@ public class ItemIO {
         try {
             JSONArray issues = response.getJSONArray("issues");
             List<Map<String, Object>> l = readItems (issues, true);
+            fromJira = new ArrayList<>(l);
             initItems(l);
         } catch (Exception e) {
             System.out.println("response:" + response.toString());
@@ -170,7 +176,7 @@ public class ItemIO {
                         item.put(Cluster.CATEGORY.getColumn(), "undefined");
                     }
                     JSONObject fields = issue.getJSONObject("fields");
-                    item.put("id", issue.getString("id"));
+                    item.put("id", issue.getString("key"));
                     String ringText = fields.getJSONObject("status").getString("name");
                     item.put("Ring", ringText);
                    /* if (ringText.equals("Open")) {
@@ -374,7 +380,8 @@ public class ItemIO {
         return true;
     }
 
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
+
          try {
              ItemIO iio = new ItemIO();
              args = new String[]{"C:\\Work7\\New Technologies\\FutureRoadmap2\\TR Themen Survey Comparison 20190405 v3.txt"};
@@ -446,6 +453,69 @@ public class ItemIO {
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
+    }
+
+    public static void main(String[] args) {
+
+        try {
+            Map<String, Integer> counts1 = new HashMap<>();
+            Map<String, Set<String>> counts2 = new HashMap<>();
+            ItemIO iio = new ItemIO();
+            iio.username = args[0];
+            iio.password = args[1];
+            iio.initFromJira(false);
+            //iio.initFromLastJiraRequest(false);
+            for (Map<String, Object> item : iio.fromJira) {
+                try {
+                    String id = (String) item.get("id");
+
+                    /*if (!id.equals("NTTR-2975")) {
+                        continue;
+                    }*/
+
+                    System.out.println("read " + id);
+                    JSONObject response = iio.get("/rest/api/latest/issue/" + id + "?expand=changelog");
+                    System.out.println("response:" + response.toString());
+                    JSONObject changelog = response.getJSONObject("changelog");
+                    JSONArray histories = changelog.getJSONArray("histories");
+                    aggregate(histories, id, counts1, counts2);
+
+                    JSONObject fields = response.getJSONObject("fields");
+                    JSONObject comment = fields.getJSONObject("comment");
+                    JSONArray comments = comment.getJSONArray("comments");
+                    aggregate(comments, id, counts1, counts2);
+
+                    //System.out.println("response:" + changelog.toString());
+                } catch (Exception e) {e.printStackTrace(System.out);}
+            }
+            for (Map.Entry<String, Integer> e : counts1.entrySet()) {
+                 System.out.println(e.getKey() + "," + e.getValue() + "," + counts2.get(e.getKey()).size());
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }
+    }
+
+    private static void aggregate(JSONArray authors, String id, Map<String, Integer> counts1, Map<String, Set<String>> counts2) {
+        for (int i = 0; i < authors.length(); i++) {
+            String key = ((JSONObject) authors.get(i)).getJSONObject("author").getString("key");
+            //System.out.println(key);
+
+            Integer count1 = counts1.get(key);
+            if (count1 == null) {
+                count1 = 0;
+            }
+            count1++;
+            counts1.put(key, count1);
+
+            Set<String> count2 = counts2.get(key);
+            if (count2 == null) {
+                count2 = new HashSet<>();
+                counts2.put(key, count2);
+            }
+            count2.add(id);
+        }
+
     }
 
     public void postToJiraBulk(List<Map<String, Object>> items) {
@@ -697,5 +767,6 @@ public class ItemIO {
 
         return jsonR;
     }
+
 
 }

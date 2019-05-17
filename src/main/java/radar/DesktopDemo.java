@@ -194,7 +194,7 @@ public class DesktopDemo extends JFrame {
     public DesktopDemo(boolean init) {
     	itemIO = new ItemIO();
     	if (init) {
-    		if (! itemIO.initFromLastJiraRequest()) {
+    		if (! itemIO.initFromLastJiraRequest(true)) {
 				itemIO.initFromInputStream(DesktopDemo.class.getClassLoader().getResourceAsStream("sampleData.txt"), false);
 			}
 			switchTmpItems();
@@ -682,8 +682,9 @@ public class DesktopDemo extends JFrame {
 			public void componentResized(ComponentEvent e) {
 
 				if (
-						(int) Math.abs (jp.getWidth() - Config.baseDimension.getWidth()) > 0 ||
-								(int) Math.abs(jp.getHeight() - Config.baseDimension.getHeight()) > 0) {
+						(int) Math.abs (jp.getWidth() - Config.baseDimension.getWidth()) != 0 ||
+								(int) Math.abs(jp.getHeight() - Config.baseDimension.getHeight()) != 0)
+				{
 					double sf = getSF();
 					at.setToIdentity();
 					at.scale(sf, sf);
@@ -907,7 +908,7 @@ public class DesktopDemo extends JFrame {
 				} else
 				if (e.getKeyCode() == KeyEvent.VK_F5) {
 					usernamePasswordDialog();
-					itemIO.initFromJira();
+					itemIO.initFromJira(true);
 					switchTmpItems();
 				} else
 				if (e.getKeyCode() == KeyEvent.VK_F6) {

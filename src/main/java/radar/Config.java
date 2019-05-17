@@ -28,24 +28,6 @@ public class Config {
     public static final int yOffset = 50;
     public static final Dimension baseDimension = new Dimension (1920, 1080);
 
-    public static final Set<String> categories = new HashSet<>();
-    static {
-    	categories.add("default");
-    	categories.add("k1");
-    	categories.add("k2");
-    	categories.add("k3");
-    	categories.add("k4");
-    	categories.add("k5");
-    	categories.add("k6");
-    	categories.add("Concepts (Technical)");
-    	categories.add("Platforms");
-    	categories.add("Products & Tools");
-    	categories.add("Methods & Organisationals");
-    	categories.add("Languages");
-    	categories.add("Frameworks (Technical)");
-   	
-    }
-    
     public static final Map<String, String> continuousMaps = new HashMap<>();
     public static final Map<String, Map<String, Color>> categoryToColorMap = new HashMap<>();
     static {
